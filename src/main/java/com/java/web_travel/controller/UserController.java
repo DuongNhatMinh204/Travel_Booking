@@ -1,9 +1,8 @@
 package com.java.web_travel.controller;
 
 import com.java.web_travel.entity.UserEntity;
-import com.java.web_travel.service.UserService;
+import com.java.web_travel.service.Impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +17,7 @@ import java.util.Map;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
 
     @PostMapping("/register")

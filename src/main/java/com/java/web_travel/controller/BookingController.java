@@ -2,7 +2,7 @@ package com.java.web_travel.controller;
 
 import com.java.web_travel.entity.Booking;
 import com.java.web_travel.model.BookingRequest;
-import com.java.web_travel.service.BookingService;
+import com.java.web_travel.service.Impl.BookingServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ import java.util.List;
 public class BookingController {
 
     @Autowired
-    private BookingService bookingService;
+    private BookingServiceImpl bookingService;
 
     @PostMapping("/create")
     public ModelAndView createBooking(@ModelAttribute BookingRequest bookingRequest) {
