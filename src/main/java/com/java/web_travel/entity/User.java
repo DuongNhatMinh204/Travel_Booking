@@ -12,18 +12,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user")
-public class UserEntity {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name="telephone")
     private String telephone;
+
     @Column(name="password")
     private String password;
-
-    @Column(name="email")
-    private String email;
 
     @Column(name="roles")
     private String roles;
