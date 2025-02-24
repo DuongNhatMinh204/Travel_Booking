@@ -4,10 +4,8 @@ import com.java.web_travel.entity.UserEntity;
 import com.java.web_travel.service.Impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,4 +70,8 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/profile")
+    public String profile() {
+        return "userProfile";
+    }
 }

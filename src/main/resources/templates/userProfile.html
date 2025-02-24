@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>profile</title>
+    <link rel="stylesheet" href="/css/userProfile.css">
+</head>
+    <header>
+        <a href="#" class="logo"><span>Future</span>Wonders</a>
+        <nav class="bar">
+            <a href="home">Home</a>
+            <a href="booking">Booking</a>
+            <a href="trending">Trending</a>
+            <a href="news">News</a>
+            <a href="package">Packages</a>
+            <a href="services">Services</a>
+            <a href="gallery">Gallery</a>
+            <a href="review">Review</a>
+            <a href="contact">Contact</a>
+            <a href="plan-trip">Pay</a>
+        </nav>
+        <div class="icons">
+            <a href=""><i class="fas fa-search" id="search-btn"></i></a>
+            <!--    <a href=""><i class="fas fa-user" id="login-btn" style="color: #29b862;"></i></a>-->
+            <div class="dropdown">
+                <i class="fas fa-user" id="login-btn" style="color: #29b862; cursor: pointer;"></i>
+                <div class="dropdown-menu">
+                    <a th:href="@{/profile}">Thông tin tài khoản</a>
+                    <a href="/logout">Đăng xuất</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="video-container">
+        <video src="images/waves.mp4" id="video-slider" loop autoplay muted ></video>
+    </div>
+<!--thông tin-->
+<body>
+<div class="profile-container">
+    <h2>Hồ Sơ Của Tôi</h2>
+    <div class="profile-avatar">
+        <img src="/path/to/avatar.png" alt="Avatar">
+    </div>
+    <form action="/update-profile" method="post">
+        <div class="profile-row">
+            <label >Tên đăng nhập</label>
+            <input type="text" name="username" value="thangpopho" readonly>
+        </div>
+        <div class="profile-row">
+            <label for="name">Tên</label>
+            <input type="text"  name="name" value="Thắng">
+        </div>
+        <div class="profile-row">
+            <label for="email">Email</label>
+            <input type="email"name="email" value="th*********@gmail.com" readonly>
+        </div>
+        <div class="profile-row">
+            <label >Số điện thoại</label>
+            <input type="text"  name="phone" value="********57" readonly>
+        </div>
+        <div class="profile-row">
+            <label >Giới tính</label>
+            <input type="text"  value="nam" readonly>
+        </div>
+        <div class="profile-row">
+            <label >Ngày sinh</label>
+            <input type="text"  name="birthdate" value="**/03/20**" readonly>
+        </div>
+        <div >
+
+        </div>
+    </form>
+    <button id="edit-btn">Chỉnh Sửa Hồ Sơ</button>
+
+
+</div>
+<!--pup up chinh sua -->
+<div class="popup-overlay" id="popup">
+    <div class="popup-content">
+        <h3>Chỉnh Sửa Thông Tin</h3>
+        <form>
+            <label for="name">Tên</label>
+            <input type="text" id="name" value="Thắng">
+
+            <label for="email">Email</label>
+            <input type="email" id="email" value="Th*****@gmail.com">
+
+            <label for="phone">Số Điện Thoại</label>
+            <input type="text" id="phone" value="******57">
+
+            <label for="sex">Giới Tính</label>
+            <input type="text" id="sex" value="******57">
+
+            <label for="birthday">Số Điện Thoại</label>
+            <input type="text" id="birthday" value="******57">
+
+
+
+            <button type="submit">Lưu Thay Đổi</button>
+            <button type="button" class="close-btn" id="close-btn">Hủy</button>
+        </form>
+    </div>
+</div>
+<script src="/js/profile.js"></script>
+</body>
+
+</html>

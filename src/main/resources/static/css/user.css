@@ -162,4 +162,44 @@ button:hover {
     object-fit: cover;
 }
 
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Menu dropdown */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    z-index: 1000;
+    width: 200px;
+}
+
+/* Menu items */
+.dropdown-menu a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Show menu when dropdown is active */
+.dropdown.active .dropdown-menu {
+    display: block;
+}
+
+
+
 

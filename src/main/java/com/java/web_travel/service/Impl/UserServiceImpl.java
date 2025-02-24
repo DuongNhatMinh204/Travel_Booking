@@ -34,4 +34,8 @@ public class UserServiceImpl {
         }
         throw new RuntimeException("Invalid ");
     }
+    public UserEntity getUserByUserName(String username) {
+        return userRepository.findByUserName(username);
+    }
+
 }

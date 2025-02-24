@@ -67,4 +67,9 @@ public class UserWebController {
         ModelAndView mav = new ModelAndView("flight");
         return mav ;
     }
+    @RequestMapping(value = "profile" , method = RequestMethod.GET)
+    public ModelAndView profile() {
+        ModelAndView mav = new ModelAndView("userProfile");
+        return mav ;
+    }
 }

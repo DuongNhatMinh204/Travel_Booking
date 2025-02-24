@@ -1,0 +1,311 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700&display=swap');
+:root {
+    --orange: #ffa500;
+    --xanh: #29b862;
+    --red: #ec3535;
+    --xanhbien: #538df0;
+    --trong: #7be0cc;
+}
+
+* {
+    font-family: 'Nunito', sans-serif;
+    box-sizing: border-box;
+    text-transform: capitalize;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    transition: all .2s linear;
+}
+
+/*body {*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*}*/
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #333;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 35px;
+    height: 50px;
+}
+
+header .logo {
+    margin-left: 30px;
+    font-size: 30px;
+    font-weight: bolder;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+header .logo span {
+    color: var(--xanh);
+}
+
+header .bar a {
+    margin-right: 15px;
+    font-size: 18px;
+    color: white;
+}
+
+header .bar a:hover {
+    color: var(--xanh);
+}
+
+.icons {
+    margin-right: 90px;
+}
+
+.icons i {
+    color: white;
+    font-size: 18px;
+}
+
+.icons a i:hover {
+    color: var(--xanh);
+}
+.heading {
+    /* các phần tử trong heading văn bản được căn giữa  */
+    text-align: center;
+    padding: 50px;
+}
+
+.heading span {
+    font-size: 28px;
+    background: rgba(255, 165, 0, .2);
+    color: var(--trong);
+    /* đặt bán kính bo tròn  */
+    border-radius: 8px;
+    padding: 21px 18px;
+    margin-top: 80px;
+}
+
+.heading span.space {
+    /* loại bỏ màu nền của pâhnf tử span có lớp space làm cho không có màu nền  */
+    background: none;
+}
+
+.indam {
+    background-color: #7be0cc;
+}
+.hidden {
+    display: none;
+}
+.video-container video{
+    position: absolute;
+    top:0; left: 0;
+    z-index: -1;
+    height: 100%;
+    width:100%;
+    object-fit: cover;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Menu dropdown */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    z-index: 1000;
+    width: 200px;
+}
+
+/* Menu items */
+.dropdown-menu a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Show menu when dropdown is active */
+.dropdown.active .dropdown-menu {
+    display: block;
+}
+
+
+
+/*priofile*/
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    background: url('https://your-image-url.com') no-repeat center center/cover; /* Hình nền */
+}
+
+.profile-container {
+    width: 400px;
+    background-color: rgba(255, 255, 255, 0.9); /* Nền trắng mờ */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.profile-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-row {
+    margin-bottom: 15px;
+}
+
+.profile-row label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/*.profile-row input[type="text"],*/
+/*.profile-row input[type="email"],*/
+/*.profile-row input[type="file"] {*/
+/*    width: 100%;*/
+/*    padding: 10px;*/
+/*    border: 1px solid #ccc;*/
+/*    border-radius: 5px;*/
+/*}*/
+
+.profile-avatar {
+    text-align: center;
+    margin-bottom: 15px;
+
+}
+
+.profile-avatar img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.submit-button {
+    text-align: center;
+}
+
+.submit-button button {
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submit-button button:hover {
+    background-color: #d9363e;
+}
+
+/*pop up chinh sua*/
+
+/*body {*/
+/*    font-family: Arial, sans-serif;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    background: url('https://source.unsplash.com/1920x1080/?nature') no-repeat center center fixed;*/
+/*    background-size: cover;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    height: 100vh;*/
+/*}*/
+
+.profile-container h2 {
+    margin-bottom: 20px;
+}
+.profile-container button {
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+
+/* Popup Overlay */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none ;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Popup Content */
+.popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.popup-content h3 {
+    margin-bottom: 20px;
+}
+
+.popup-content label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+.popup-content input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.popup-content button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.popup-content button:hover {
+    background-color: red;
+}
+
+.close-btn {
+    background-color: #f44336;
+    margin-left: 10px;
+}
+
+.close-btn:hover {
+    background-color: red;
+}

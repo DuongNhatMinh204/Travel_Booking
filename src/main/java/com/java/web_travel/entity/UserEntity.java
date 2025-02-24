@@ -19,6 +19,10 @@ public class UserEntity {
 
     @Column(name="telephone")
     private String telephone;
+
+    @Column(name="username")
+    private String userName;
+
     @Column(name="password")
     private String password;
 
