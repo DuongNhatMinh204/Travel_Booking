@@ -22,7 +22,6 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()); // Tắt CSRF
 
 
-
         return http.build();
     }
     @Bean

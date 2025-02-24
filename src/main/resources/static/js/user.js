@@ -118,6 +118,7 @@ document.getElementById("sign-up-form").addEventListener("submit", function(even
     }
     var data = {
         name: formData.get("name"),
+        name: formData.get("username"),
         email: formData.get("email"),
         telephone: formData.get("telephone"),
         password: password,
