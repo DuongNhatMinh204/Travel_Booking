@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import java.awt.*;
 import java.net.URI;
 
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
+@SpringBootApplication()
 public class WebTravelApplication {
 
 	public static void main(String[] args) {

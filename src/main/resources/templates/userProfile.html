@@ -46,22 +46,23 @@
     <div class="profile-avatar">
         <img src="/path/to/avatar.png" alt="Avatar">
     </div>
-    <form action="/update-profile" method="post">
+    <form action="/profile" method="get">
+    <input type="hidden" name="userId" th:value="${user != null ? user.userId : 1}" />
         <div class="profile-row">
             <label >Tên đăng nhập</label>
-            <input type="text" name="username" value="thangpopho" readonly>
+            <input type="text" name="username"  readonly>
         </div>
         <div class="profile-row">
             <label for="name">Tên</label>
-            <input type="text"  name="name" value="Thắng">
+            <input type="text"  name="name" >
         </div>
         <div class="profile-row">
             <label for="email">Email</label>
-            <input type="email"name="email" value="th*********@gmail.com" readonly>
+            <input type="email"name="email"  readonly>
         </div>
         <div class="profile-row">
             <label >Số điện thoại</label>
-            <input type="text"  name="phone" value="********57" readonly>
+            <input type="text"  name="phone" readonly>
         </div>
         <div class="profile-row">
             <label >Giới tính</label>

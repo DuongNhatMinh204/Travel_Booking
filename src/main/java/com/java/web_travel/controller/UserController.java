@@ -70,8 +70,8 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/profile")
-    public String profile() {
-        return "userProfile";
-    }
+//    @GetMapping("/profile")
+//    public String profile() {
+//        return "userProfile";
+//    }
 }

@@ -20,16 +20,24 @@ public class UserEntity {
     @Column(name="telephone")
     private String telephone;
 
-    @Column(name="username")
+    @Column(name="username",nullable = false, unique = true)
     private String userName;
 
-    @Column(name="password")
+    @Column(name="password",nullable = false)
     private String password;
 
-    @Column(name="email")
+    @Column(name="email",nullable = false, unique = true)
     private String email;
 
     @Column(name="roles")
     private String roles;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private UserProfileEntity userProfile;
+
+    public void addUserProfile(UserProfileEntity userProfile) {
+        this.userProfile = userProfile;
+        userProfile.setUser(this);
+    }
 
 }
