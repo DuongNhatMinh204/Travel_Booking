@@ -30,6 +30,7 @@ public class UserProfileServiceImpl implements UserProfileService {
         userProfile.setFullName(username); // Fullname mặc định là username
         userProfile.setPhoneNumber(phone);  // Telephone mặc định là phone của User
         userProfile.setEmail(email);      // Email đồng bộ với User
+        userProfile.setUserName(username);
         // Gắn UserProfile vào User
         user.addUserProfile(userProfile);
 

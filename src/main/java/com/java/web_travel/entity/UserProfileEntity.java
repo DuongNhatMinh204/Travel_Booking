@@ -27,6 +27,12 @@ public class UserProfileEntity {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name="username")
+    private String userName;
+
+    @Column(name="roles")
+    private String roles;
+
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
