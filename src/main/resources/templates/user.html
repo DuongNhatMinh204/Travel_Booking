@@ -14,6 +14,8 @@
   <nav class="bar">
     <a href="home">Home</a>
     <a href="booking">Booking</a>
+    <a href="hotel">Hotel</a>
+    <a href="flight">FLight</a>
     <a href="trending">Trending</a>
     <a href="news">News</a>
     <a href="package">Packages</a>
@@ -24,12 +26,12 @@
     <a href="plan-trip">Pay</a>
   </nav>
   <div class="icons">
-    <a href=""><i class="fas fa-search" id="search-btn"></i></a>
     <a href=""><i class="fas fa-user" id="login-btn" style="color: #29b862;"></i></a>
   </div>
 </header>
+
 <div class="video-container">
-  <video src="images/waves.mp4" id="video-slider" loop autoplay muted ></video>
+  <video src="images/waves.mp4" id="video-slider" loop autoplay muted></video>
 </div>
 
 <!-- Form Đăng Nhập -->
@@ -40,14 +42,13 @@
       <td><button type="button" id="sign-up-button">SignUp</button></td>
     </tr>
     <tr>
-      <td colspan="2"><input type="tel" name="telephone" placeholder="Enter your telephone: " required></td>
+      <td colspan="2"><input type="tel" placeholder="Enter your telephone" id="login-phone" required></td>
     </tr>
     <tr>
-      <td colspan="2"><input type="password" name="password" placeholder="Enter your password" required></td>
+      <td colspan="2"><input type="password" placeholder="Enter your password" id="login-password" required></td>
     </tr>
     <tr>
-      <td><input type="submit" value="Submit"></td>
-      <td><input type="submit" value="Forgot password"></td>
+      <td colspan="2"><input type="submit" value="Login"></td>
     </tr>
   </table>
 </form>
@@ -60,26 +61,66 @@
       <td><button type="button" id="sign-up-button1" class="indam">SignUp</button></td>
     </tr>
     <tr>
-      <td colspan="2"><input type="text" name="name" placeholder="Enter your name: " required></td>
+      <td colspan="2"><input type="text" placeholder="Enter your name" id="signup-name" required></td>
     </tr>
     <tr>
-      <td colspan="2"><input type="email" name="email" placeholder="Enter your email: " required></td>
+      <td colspan="2"><input type="email" placeholder="Enter your email" id="signup-email" required></td>
     </tr>
     <tr>
-      <td colspan="2"><input type="tel" name="telephone" placeholder="Enter your telephone: " required></td>
+      <td colspan="2"><input type="tel" placeholder="Enter your telephone" id="signup-phone" required></td>
     </tr>
     <tr>
-      <td colspan="2"><input type="password" name="password" placeholder="Create your password" required></td>
+      <td colspan="2"><input type="date" id="birthday" required></td>
     </tr>
     <tr>
-      <td colspan="2"><input type="password" name="confirmPassword" placeholder="Confirm your password" required></td>
+      <td colspan="2"><input type="password" placeholder="Create your password" id="signup-password" required></td>
     </tr>
     <tr>
-      <td colspan="2"><input type="submit" value="Sign Up" id = "abc"></td>
+      <td colspan="2"><input type="password" placeholder="Confirm your password" id="signup-confirm-password" required></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="submit" value="Sign Up"></td>
     </tr>
   </table>
 </form>
 
+<!-- Modal Thông Báo -->
+<div id="error-modal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close-modal">&times;</span>
+    <h2>Thông báo</h2>
+    <p id="error-message"></p>
+    <button id="close-modal-button">OK</button>
+  </div>
+</div>
+
 <script src="/js/user.js"></script>
 </body>
 </html>
+
+<style>
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+  }
+
+  .hidden {
+    display: none;
+  }
+</style>

@@ -8,13 +8,57 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="/css/admin_account.css">
     <link rel="stylesheet" href="fontawesome-free-6.6.0-web/fontawesome-free-6.6.0-web/css/all.min.css">
+    <style>
+        /* Đảm bảo rằng bảng chiếm 100% độ rộng của trang */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        /* Tạo khoảng cách và đường viền cho các ô */
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+
+        .action-buttons button {
+            padding: 5px 10px;
+            margin: 2px;
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+        }
+
+        .toggle-status-btn {
+            background-color: #008CBA;
+            color: white;
+            border: none;
+        }
+    </style>
 </head>
 <body>
 <header>
     <a href="#" class="logo"><span>Future</span>Wonders</a>
     <nav class="bar">
-        <a href="admin_booking" >Trip Management</a>
-        <a href="" class="indam" >Account Management</a>
+        <a href="admin_booking">Trip Management</a>
+        <a href="" class="indam">Account Management</a>
     </nav>
     <div class="icons">
         <a href=""><i class="fas fa-search" id="search-btn"></i></a>
@@ -31,9 +75,7 @@
         <span><i class="fas fa-clock"></i> <span id="currentTime"></span></span>
     </div>
 </div>
-<script src="q.js"></script>
-</body>
-<!--  -->
+
 <div class="btn-group">
     <a href="createStaff" class="btn btn-create"><i class="fa fa-plus"></i> Tạo mới nhân viên</a>
     <a href="#" class="btn btn-upload"><i class="fa fa-upload"></i> Tải từ file</a>
@@ -43,23 +85,13 @@
     <a href="#" class="btn btn-pdf"><i class="fa fa-file-pdf"></i> Xuất PDF</a>
     <a href="#" class="btn btn-delete-all"><i class="fa fa-trash"></i> Xóa tất cả</a>
 </div>
-<!-- tìm kiếm -->
+
 <!-- Nút để thu/nhả -->
 <button class="toggle-btn" onclick="toggleFilter()">Thu gọn bộ lọc</button>
 
 <!-- Container có thể thu/nhả -->
 <div class="filter-container" id="filterContainer">
-    <!-- Dropdown để chọn số lượng danh mục hiển thị -->
-    <div class="items-per-page">
-        <label for="items">Hiện</label>
-        <select id="items" name="items">
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-        </select>
-        <label for="items">danh mục</label>
-    </div>
+
 
     <!-- Ô tìm kiếm -->
     <div class="search-box">
@@ -67,152 +99,21 @@
         <input type="text" id="search" name="search" placeholder="Nhập từ khóa...">
     </div>
 </div>
-<!--  -->
+
 <h2>Bảng thông tin khách hàng</h2>
 
-<table>
+<table id="userTable">
     <thead>
     <tr>
         <th>Họ và tên</th>
         <th>Số điện thoại</th>
-        <th>Tên đăng nhập</th>
-        <th>Mật khẩu</th>
-        <th>Ảnh căn cước</th>
+        <th>Email</th>
+        <th>Trạng thái</th>
         <th>Tính năng</th>
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>Nguyễn Văn A</td>
-        <td>0987654321</td>
-        <td>nguyenvana</td>
-        <td>******</td>
-        <td><img src="https://via.placeholder.com/50" alt="Ảnh căn cước"></td>
-        <td>
-            <div class="action-buttons">
-                <button class="edit-btn">Sửa</button>
-                <button class="delete-btn">Xóa</button>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td>Trần Thị B</td>
-        <td>0912345678</td>
-        <td>tranthib</td>
-        <td>******</td>
-        <td><img src="https://via.placeholder.com/50" alt="Ảnh căn cước"></td>
-        <td>
-            <div class="action-buttons">
-                <button class="edit-btn">Sửa</button>
-                <button class="delete-btn">Xóa</button>
-            </div>
-        </td>
-    </tr>
-    <tr></tr>
-    <td>Nguyễn Văn A</td>
-    <td>0987654321</td>
-    <td>nguyenvana</td>
-    <td>******</td>
-    <td><img src="https://via.placeholder.com/50" alt="Ảnh căn cước"></td>
-    <td>
-        <div class="action-buttons">
-            <button class="edit-btn">Sửa</button>
-            <button class="delete-btn">Xóa</button>
-        </div>
-    </td>
-    </tr>
-    <tr></tr>
-    <td>Nguyễn Văn A</td>
-    <td>0987654321</td>
-    <td>nguyenvana</td>
-    <td>******</td>
-    <td><img src="https://via.placeholder.com/50" alt="Ảnh căn cước"></td>
-    <td>
-        <div class="action-buttons">
-            <button class="edit-btn">Sửa</button>
-            <button class="delete-btn">Xóa</button>
-        </div>
-    </td>
-    </tr>
-    <tr></tr>
-    <td>Nguyễn Văn A</td>
-    <td>0987654321</td>
-    <td>nguyenvana</td>
-    <td>******</td>
-    <td><img src="https://via.placeholder.com/50" alt="Ảnh căn cước"></td>
-    <td>
-        <div class="action-buttons">
-            <button class="edit-btn">Sửa</button>
-            <button class="delete-btn">Xóa</button>
-        </div>
-    </td>
-    </tr>
-    <tr></tr>
-    <td>Nguyễn Văn A</td>
-    <td>0987654321</td>
-    <td>nguyenvana</td>
-    <td>******</td>
-    <td><img src="https://via.placeholder.com/50" alt="Ảnh căn cước"></td>
-    <td>
-        <div class="action-buttons">
-            <button class="edit-btn">Sửa</button>
-            <button class="delete-btn">Xóa</button>
-        </div>
-    </td>
-    </tr>
-    <tr>
-    </tr>
-    <td>Nguyễn Văn A</td>
-    <td>0987654321</td>
-    <td>nguyenvana</td>
-    <td>******</td>
-    <td><img src="https://via.placeholder.com/50" alt="Ảnh căn cước"></td>
-    <td>
-        <div class="action-buttons">
-            <button class="edit-btn">Sửa</button>
-            <button class="delete-btn">Xóa</button>
-        </div>
-    </td>
-    </tr>
-    <tr></tr>
-    <td>Nguyễn Văn A</td>
-    <td>0987654321</td>
-    <td>nguyenvana</td>
-    <td>******</td>
-    <td><img src="https://via.placeholder.com/50" alt="Ảnh căn cước"></td>
-    <td>
-        <div class="action-buttons">
-            <button class="edit-btn">Sửa</button>
-            <button class="delete-btn">Xóa</button>
-        </div>
-    </td>
-    </tr>
-    <tr></tr>
-    <td>Nguyễn Văn A</td>
-    <td>0987654321</td>
-    <td>nguyenvana</td>
-    <td>******</td>
-    <td><img src="https://via.placeholder.com/50" alt="Ảnh căn cước"></td>
-    <td>
-        <div class="action-buttons">
-            <button class="edit-btn">Sửa</button>
-            <button class="delete-btn">Xóa</button>
-        </div>
-    </td>
-    </tr>
-    <tr></tr>
-    <td>Nguyễn Văn A</td>
-    <td>0987654321</td>
-    <td>nguyenvana</td>
-    <td>******</td>
-    <td><img src="https://via.placeholder.com/50" alt="Ảnh căn cước"></td>
-    <td>
-        <div class="action-buttons">
-            <button class="edit-btn">Sửa</button>
-            <button class="delete-btn">Xóa</button>
-        </div>
-    </td>
-    </tr>
+    <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
     </tbody>
 </table>
 
@@ -221,3 +122,87 @@
     <button>1</button>
     <button>Tiếp</button>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("DOM fully loaded");
+        fetch("/user/allUsers") // Gọi API để lấy danh sách người dùng
+            .then(response => {
+                console.log("API Response:", response);
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Data:", data);
+                if (data.code === 1000 && data.data.length > 0) {
+                    console.log("Rendering table with data:", data.data);
+                    renderUserTable(data.data);
+                } else {
+                    console.error("No users found or API returned error:", data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching users:", error);
+            });
+    });
+
+    function renderUserTable(users) {
+        const tableBody = document.querySelector("#userTable tbody");
+        tableBody.innerHTML = ""; // Xóa dữ liệu cũ (nếu có)
+
+        users.forEach(user => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${user.fullName}</td>
+                <td>${user.phone}</td>
+                <td>${user.email}</td>
+                <td>${user.status ? "Hoạt động" : "Bị khóa"}</td>
+                <td>
+                    <div class="action-buttons">
+
+                        <button class="toggle-status-btn" onclick="toggleStatus(${user.id})">
+                            ${user.status ? "Khóa" : "Mở khóa"}
+                        </button>
+                    </div>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function toggleStatus(userId) {
+        if (confirm("Bạn có chắc chắn muốn thay đổi trạng thái tài khoản này không?")) {
+            fetch(`/user/changeStatus/${userId}`, {
+                method: "PATCH",
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.code === 1000) {
+                        alert("Thay đổi trạng thái thành công!");
+                        fetch("/user/allUsers")
+                            .then(response => response.json())
+                            .then(data => renderUserTable(data.data));
+                    } else {
+                        alert("Thay đổi trạng thái thất bại: " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error toggling status:", error);
+                });
+        }
+    }
+
+    function toggleFilter() {
+        const filterContainer = document.getElementById("filterContainer");
+        filterContainer.style.display = filterContainer.style.display === "none" ? "block" : "none";
+    }
+</script>
+</body>
+</html>

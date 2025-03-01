@@ -147,3 +147,18 @@ header .bar a:hover{
     width:100%;
     object-fit: cover;
 }
+.btn.choose-flight {
+    background-color: #29b862;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin: 5px;
+}
+
+.btn.choose-flight:hover {
+    background-color: #1e8449;
+}

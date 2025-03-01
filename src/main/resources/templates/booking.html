@@ -14,6 +14,8 @@
     <nav class="bar">
         <a href="home">Home</a>
         <a href="booking" class="indam">Booking</a>
+        <a href="hotel">Hotel</a>
+        <a href="flight">FLight</a>
         <a href="trending">Trending</a>
         <a href="news">News</a>
         <a href="package">Packages</a>
@@ -44,33 +46,26 @@
 <div class="booking">
     <img src="images/igeat.jpg" alt="">
 <!--    // <form action="flight">-->
-    <form action="/booking/create" method="post">
+    <form id="booking-form">
         <div class="inputBox">
             <h3>Palace</h3>
-            <input type="text" name="palaceName" placeholder="palace name ">
+            <input type="text" name="palaceName" id="palaceName" placeholder="Palace name" required>
         </div>
         <div class="inputBox">
             <h3>How many people</h3>
-            <input type="text" name ="numberOfPeople" placeholder="number of people">
+            <input type="number" name="numberOfPeople" id="numberOfPeople" placeholder="Number of people" required>
         </div>
         <div class="inputBox">
-            <h3>Checkin Time</h3>
-            <input type="date" name="checkinTime" >
+            <h3>Check-in Time</h3>
+            <input type="date" name="checkinTime" id="checkinTime" required>
         </div>
         <div class="inputBox">
-            <h3>Check Out Time</h3>
-            <input type="date" name="checkoutTime">
-        </div>
-        <div class="inputBox">
-            <h3>Choose Hotel</h3>
-            <select name = "hotel">
-                <option value="Mường Thanh Hotel" > Mường Thanh Hotel </option>
-                <option value="Ha Noi Hotel" >Ha Noi Hotel</option>
-                <option value="Five Star Hotel" >Five Star Hotel</option>
-            </select>
+            <h3>Check-out Time</h3>
+            <input type="date" name="checkoutTime" id="checkoutTime" required>
         </div>
         <input type="submit" value="Booking Now" class="submit">
     </form>
+    <p id="booking-message"></p>
 </div>
 
 <section class="footer">
@@ -123,3 +118,96 @@
 
 
 </html>
+<script src="/js/booking.js"></script>
+<!-- Modal thông báo lỗi -->
+<div id="error-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Thông báo</h2>
+        <p id="error-message"></p>
+        <button class="modal-button">Đóng</button>
+    </div>
+</div>
+
+<!-- CSS cho modal -->
+<style>
+    /* Modal */
+    .modal {
+        display: none; /* Ẩn modal mặc định */
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6); /* Nền mờ đậm hơn */
+        backdrop-filter: blur(5px); /* Hiệu ứng blur */
+    }
+
+    .modal-content {
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2); /* Gradient background */
+        margin: 15% auto;
+        padding: 30px;
+        border: none;
+        border-radius: 15px; /* Bo góc */
+        width: 80%;
+        max-width: 500px;
+        text-align: center;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Đổ bóng */
+        animation: slideIn 0.5s ease-out; /* Hiệu ứng slideIn */
+    }
+
+    /* Hiệu ứng slideIn */
+    @keyframes slideIn {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .close {
+        position: absolute;
+        right: 20px;
+        top: 15px;
+        font-size: 28px;
+        color: #555;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .close:hover {
+        color: #f44336; /* Màu đỏ khi hover */
+    }
+
+    .modal-content h2 {
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #333;
+    }
+
+    .modal-content p {
+        font-size: 18px;
+        color: #555;
+        margin-bottom: 25px;
+    }
+
+    .modal-button {
+        background-color: #008CBA; /* Màu nền nút */
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .modal-button:hover {
+        background-color: #007B9E; /* Màu nền nút khi hover */
+    }
+</style>

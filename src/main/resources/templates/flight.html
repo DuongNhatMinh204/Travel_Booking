@@ -14,6 +14,8 @@
     <nav class="bar">
         <a href="home">Home</a>
         <a href="booking">Booking</a>
+        <a href="hotel">Hotel</a>
+        <a href="flight" class="indam">FLight</a>
         <a href="trending">Trending</a>
         <a href="news">News</a>
         <a href="package">Packages</a>
@@ -22,7 +24,6 @@
         <a href="review">Review</a>
         <a href="contact">Contact</a>
         <a href="plan-trip">Pay</a>
-        <a href="select-flight" class="indam">Select Flight</a>
     </nav>
     <div class="icons">
         <a href=""><i class="fas fa-search" id="search-btn"></i></a>
@@ -46,30 +47,13 @@
     <span>t</span>
 </h1>
 
-<div class="flight-selection">
-<!--    <form action="plan-trip">-->
-    <form action="/flight/select" method="post">
-        <div class="inputBox">
-            <h3>Departure</h3>
-            <input type="text" name="departure" placeholder="Enter departure city">
-        </div>
-
-        <div class="inputBox">
-            <h3>Flight Date</h3>
-            <input type="date" name="flightDate">
-        </div>
-        <div class="inputBox">
-            <h3>Class</h3>
-            <select name = "classFlight">
-                <option value="economy" >Economy</option>
-                <option value="business" >Business</option>
-                <option value="first-class" >First Class</option>
-            </select>
-        </div>
-        <input type="submit" value="Select" class="submit" style="background-color: #51cd82">
-    </form>
+<div class="container">
+    <h1>Danh sách chuyến bay</h1>
+    <div id="flight-list" class="flight-list">
+        <!-- Danh sách chuyến bay sẽ được thêm vào đây bằng JavaScript -->
+    </div>
 </div>
-
+<script src="/js/flight.js"></script>
 <section class="footer">
     <div class="container-footer">
         <div class="footer-preview">
@@ -83,11 +67,11 @@
         <div class="footer-preview">
             <h2>Brand Location</h2>
             <ul>
-                <a href=""><li>India</li></a>
-                <a href=""><li>USA</li></a>
-                <a href=""><li>Japan</li></a>
-                <a href=""><li>France</li></a>
-                <a href=""><li>Viet Nam</li></a>
+                <li><a href="">India</a></li>
+                <li><a href="">USA</a></li>
+                <li><a href="">Viet Nam</a></li>
+                <li><a href="">New York</a></li>
+                <li><a href="">London</a></li>
             </ul>
         </div>
         <div class="footer-preview">
