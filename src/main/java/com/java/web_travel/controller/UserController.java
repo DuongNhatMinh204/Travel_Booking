@@ -1,75 +1,59 @@
 package com.java.web_travel.controller;
 
-import com.java.web_travel.entity.UserEntity;
-import com.java.web_travel.service.Impl.UserServiceImpl;
+import com.java.web_travel.entity.User;
+import com.java.web_travel.model.request.ChangePassDTO;
+import com.java.web_travel.model.request.UserCreateDTO;
+import com.java.web_travel.model.request.UserLoginDTO;
+import com.java.web_travel.model.response.ApiReponse;
+import com.java.web_travel.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/user")
 public class UserController {
-
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
-
-    @PostMapping("/register")
-    public ResponseEntity<Map<String, Object>> register(@RequestBody UserEntity user) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            userService.register(user);
-            response.put("success", true);
-            response.put("message", "Đăng ký thành công");
-        } catch (RuntimeException e) {
-            response.put("success", false);
-            response.put("message", e.getMessage());
-        }
-        return ResponseEntity.ok(response);
+    @PostMapping("/create")
+    public ApiReponse<User> createUser(@Valid  @RequestBody UserCreateDTO userCreateDTO) {
+        ApiReponse<User> apiReponse = new ApiReponse<>();
+        apiReponse.setData(userService.createUser(userCreateDTO));
+        apiReponse.setMessage("create user success");
+        return apiReponse;
     }
-
-    @PostMapping("/createStaff")
-    public ResponseEntity<Map<String, Object>> createStaff(@RequestBody UserEntity user) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            userService.register(user);
-            response.put("success", true);
-            response.put("message", "Đăng ký thành công");
-        } catch (RuntimeException e) {
-            response.put("success", false);
-            response.put("message", e.getMessage());
-        }
-        return ResponseEntity.ok(response);
-    }
-
-
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody UserEntity user) {
-        UserEntity authenticatedUser = userService.login(user.getTelephone(), user.getPassword());
-        Map<String, Object> response = new HashMap<>();
-
-        if (authenticatedUser != null) {
-            response.put("success", true);
-            response.put("message", "Login successful");
-
-            // Kiểm tra vai trò của người dùng
-            if ("admin".equals(authenticatedUser.getRoles())) {
-                response.put("redirectUrl", "http://localhost:8080/admin_booking");
-            } else {
-                response.put("redirectUrl", "http://localhost:8080/home");
-            }
-        } else {
-            response.put("success", false);
-            response.put("message", "Invalid telephone or password");
+    public ApiReponse<User> loginUser(@RequestBody UserLoginDTO userLoginDTO) {
+        ApiReponse<User> apiReponse = new ApiReponse<>();
+        User user = userService.loginUser(userLoginDTO);
+        apiReponse.setData(user);
+        apiReponse.setMessage("login user success");
+        if(user.getRole().getRoleCode().toString().equals("ADMIN")){
+            apiReponse.setCode(8888);
+            apiReponse.setMessage("login admin success");
         }
-
-        return ResponseEntity.ok(response);
+        return apiReponse;
     }
-
+    @PatchMapping("/changePassword")
+    public ApiReponse<User> changePassword(@Valid @RequestBody ChangePassDTO changePassDto) {
+        userService.changePassword(changePassDto);
+        return new ApiReponse<>(1000,"success") ;
+    }
+    @GetMapping("/allUsers")
+    public ApiReponse<List<User>> getAllUsers() {
+        ApiReponse<List<User>> apiReponse = new ApiReponse<>();
+        apiReponse.setData(userService.getAllUsers());
+        apiReponse.setMessage("get all users success");
+        return apiReponse ;
+    }
+    @PatchMapping("/changeStatus/{id}")
+    public ApiReponse<User> changeStatus(@PathVariable Long id) {
+        ApiReponse<User> apiReponse = new ApiReponse<>();
+        apiReponse.setData(userService.changeStatus(id));
+        apiReponse.setMessage("change status success");
+        return apiReponse;
+    }
 }

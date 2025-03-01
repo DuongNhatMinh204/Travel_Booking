@@ -1,62 +1,39 @@
-package com.java.web_travel.entity;
+package com.java.web_travel.model.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.java.web_travel.enums.TicketClass;
-import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
-import java.util.List;
 
-@Entity
-@Table(name = "flight")
-public class Flight {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id ;
-    @Column(name = "ticket_class")
-    @Enumerated(EnumType.STRING)
+public class FlightDTO {
+    @NotNull(message ="ARGUMENT_NOT_VALID" )
     private TicketClass ticketClass;
-    @Column(name = "airline_name")
+    @NotBlank(message = "ARGUMENT_NOT_VALID")
     private String airlineName ;
-    @Column(name = "price")
+    @Min(value = 0 ,message = "NUMBER_NOT_VALID")
     private double price;
-    @Column(name = "check_in_date")
-    @DateTimeFormat
+    @NotNull(message = "ARGUMENT_NOT_VALID")
+    @DateTimeFormat()
     private Date checkInDate ;
-    @Column(name = "check_out_date")
-    @DateTimeFormat
+    @NotNull(message = "ARGUMENT_NOT_VALID")
+    @DateTimeFormat()
     private Date checkOutDate ;
-    @Column(name = "numberOfChairs")
+    @Min(0)
     private int numberOfChairs ;
-    @Column(name = "seatAvailable")
-    private int seatAvailable ;
 
-    @OneToMany(mappedBy = "flight" ,cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Order> orders ;
-
-    public Flight() {
+    public FlightDTO() {
     }
 
-    public Flight(Long id, TicketClass ticketClass, String airlineName, double price, Date checkInDate, Date checkOutDate, int numberOfChairs) {
-        this.id = id;
+    public FlightDTO(TicketClass ticketClass, String airlineName, double price, Date checkInDate, Date checkOutDate, int numberOfChairs) {
         this.ticketClass = ticketClass;
         this.airlineName = airlineName;
         this.price = price;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.numberOfChairs = numberOfChairs;
-        this.seatAvailable = numberOfChairs;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public TicketClass getTicketClass() {
@@ -105,21 +82,5 @@ public class Flight {
 
     public void setNumberOfChairs(int numberOfChairs) {
         this.numberOfChairs = numberOfChairs;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
-    public int getSeatAvailable() {
-        return seatAvailable;
-    }
-
-    public void setSeatAvailable(int seatAvailable) {
-        this.seatAvailable = seatAvailable;
     }
 }
