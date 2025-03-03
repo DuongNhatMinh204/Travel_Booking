@@ -2,9 +2,13 @@ package com.java.web_travel.service.Impl;
 
 import com.java.web_travel.entity.UserEntity;
 import com.java.web_travel.entity.UserProfileEntity;
+import com.java.web_travel.mapper.UserMapper;
+import com.java.web_travel.mapper.UserProfileMapper;
+import com.java.web_travel.model.UserModel;
 import com.java.web_travel.repository.UserProfileRepository;
 import com.java.web_travel.repository.UserRepository;
 import com.java.web_travel.service.UserProfileService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +19,14 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Autowired
     private UserProfileRepository userProfileRepository;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private UserProfileMapper userProfileMapper;
+
+
 
     @Override
     public UserEntity createUser(String username, String password, String email, String phone) {
@@ -39,12 +51,12 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
-    public UserProfileEntity getUserById(Long userId) {
+    public UserProfileEntity getUserById(Integer userId) {
         return userProfileRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
     @Override
-    public UserProfileEntity updateProfile(Long userId, String fullName, String telephone, String email) {
+    public UserProfileEntity updateProfile(Integer userId, String fullName, String telephone, String email) {
         // Tìm User
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -67,6 +79,14 @@ public class UserProfileServiceImpl implements UserProfileService {
         }
 
         return userProfileRepository.save(userProfile);
+    }
+
+    @Override
+    public UserModel findUserById(Integer id)  {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Buddhist not found with id: " + id));
+        return userMapper.fromDto(userEntity);
+
     }
 
 

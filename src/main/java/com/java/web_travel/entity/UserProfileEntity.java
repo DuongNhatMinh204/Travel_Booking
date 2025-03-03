@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class UserProfileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "full_name")
     private String fullName;

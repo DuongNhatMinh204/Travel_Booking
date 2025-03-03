@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import java.awt.*;
 import java.net.URI;
 
-@SpringBootApplication()
+@SpringBootApplication(scanBasePackages = "com.java.web_travel")
 public class WebTravelApplication {
 
 	public static void main(String[] args) {

@@ -1,7 +1,9 @@
 package com.java.web_travel.controller;
 
+import com.java.web_travel.dto.GetMethodResponse;
 import com.java.web_travel.entity.UserEntity;
 import com.java.web_travel.entity.UserProfileEntity;
+import com.java.web_travel.model.UserModel;
 import com.java.web_travel.service.UserProfileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -10,9 +12,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.web.service.invoker.HttpServiceProxyFactory.builder;
 
 @RestController
 @RequestMapping("/users")
@@ -33,7 +38,7 @@ public class UserProfileController {
 
     }
     @GetMapping("/profile")
-    public String showProfile(@RequestParam("userId") Long userId, Model model) {
+    public String showProfile(@RequestParam("userId") Integer userId, Model model) {
         UserProfileEntity user = userProfileService.getUserById(userId);
         if (user != null) {
             model.addAttribute("user", user);
@@ -48,7 +53,7 @@ public class UserProfileController {
             @ApiResponse(responseCode = "200", description = "Successfully")
     })
     public String updateUserProfile(HttpServletRequest request,
-                                    @PathVariable Long userId,
+                                    @PathVariable Integer userId,
                                     @RequestParam(required = false) String fullName,
                                     @RequestParam(required = false) String telephone,
                                     @RequestParam(required = false) String email,
@@ -62,6 +67,23 @@ public class UserProfileController {
         model.addAttribute("successMessage", "Hồ sơ đã được cập nhật thành công!");
         return "userProfile";
 //        return ResponseEntity.ok(userProfileEntity);
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "API get user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully")
+    })
+    public ResponseEntity<?> getBuddhistById(@PathVariable Integer id) {
+        UserModel userModel = userProfileService.findUserById(id);
+        return ResponseEntity.ok(GetMethodResponse.builder()
+                .status(true)
+                .message("Successfully")
+                .data(userModel)
+                .errorCode(HttpStatus.OK.name().toLowerCase())
+                .httpCode(HttpStatus.OK.value())
+                .build()
+        );
     }
 
 }

@@ -8,5 +8,5 @@ import org.mapstruct.Mapper;
 public abstract class UserProfileMapper {
     public abstract UserProfileEntity fromDto(UserProfileModel userProfileModel);
 
-    public abstract UserProfileModel ToDo(UserProfileEntity userProfile);
+    public abstract UserProfileModel ToDto(UserProfileEntity userProfile);
 }
