@@ -29,4 +29,10 @@ public class HotelController {
         apiReponse.setMessage("Success");
         return apiReponse;
     }
+    @PutMapping("/updateHotel/{id}")
+    public  ApiReponse<Hotel> updateHotel(@Valid @RequestBody HotelDTO hotelDTO,@PathVariable Long id) {
+        ApiReponse<Hotel> apiReponse = new ApiReponse<>();
+        apiReponse.setData(hotelService.updateHotel(hotelDTO,id));
+        return apiReponse;
+    }
 }

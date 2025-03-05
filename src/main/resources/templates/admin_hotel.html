@@ -3,80 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book</title>
+    <title>List Hotel</title>
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="/css/admin_hotel.css">
-    <title>Hotel Booking</title>
+    <link rel="stylesheet" href="/css/admin_account.css">
+    <link rel="stylesheet" href="fontawesome-free-6.6.0-web/fontawesome-free-6.6.0-web/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
-        #bookingTable {
+        body { background-color: #f4f4f4; }
+        .container { margin-top: 80px; }
+        .table th { background-color: #333; color: white; }
+        .btn { margin: 2px; }
+    </style>
+    <style>
+        /* Đảm bảo rằng bảng chiếm 100% độ rộng của trang */
+        table {
             width: 100%;
             border-collapse: collapse;
         }
-        #bookingTable th, #bookingTable td {
+
+        /* Tạo khoảng cách và đường viền cho các ô */
+        th, td {
             padding: 12px;
             text-align: left;
             border: 1px solid #ddd;
         }
-        #bookingTable th {
+
+
+        th {
             background-color: #f2f2f2;
         }
-        .delete-btn, .add-btn {
-            padding: 8px 12px;
+
+
+        .action-buttons button {
+            padding: 5px 10px;
+            margin: 2px;
             cursor: pointer;
+        }
+
+        .edit-btn {
+            background-color: #4CAF50;
+            color: white;
             border: none;
         }
+
         .delete-btn {
             background-color: #f44336;
             color: white;
+            border: none;
         }
-        .add-btn {
-            background-color: #4CAF50;
+
+        .toggle-status-btn {
+            background-color: #008CBA;
             color: white;
+            border: none;
         }
     </style>
 </head>
 <body>
-<h2>Hotel Booking Management</h2>
-<button class="add-btn" onclick="addBooking()">Thêm</button>
-<table id="bookingTable">
-    <thead>
-    <tr>
-        <th>Hotel Name</th>
-        <th>Price</th>
-        <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>Sunrise Hotel</td>
-        <td>$200</td>
-        <td><button class="delete-btn" onclick="deleteRow(this)">Xóa</button></td>
-    </tr>
-    <tr>
-        <td>Moonlight Resort</td>
-        <td>$350</td>
-        <td><button class="delete-btn" onclick="deleteRow(this)">Xóa</button></td>
-    </tr>
-    </tbody>
-</table>
+<header>
+    <a href="#" class="logo" style="text-decoration: none"><span>Future</span>Wonders</a>
+    <nav class="bar">
+        <a href="admin_booking" style="text-decoration: none">Trip Management</a>
+        <a href="admin_account" style="text-decoration: none">Account Management</a>
+        <a href="admin_flights" style="text-decoration: none" > Flight Management</a>
+        <a href="admin_hotel" style="text-decoration: none" class="indam">Hotel Management</a>
+    </nav>
+    <div class="icons">
+        <a href=""><i class="fas fa-search" id="search-btn"></i></a>
+        <a href="user"><i class="fas fa-user" id="login-btn"></i></a>
+    </div>
+</header>
+<div class="container">
+    <h2 class="mb-4">Hotel Management</h2>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addHotelModal">Create New Hotel</button>
+    <table class="table mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Hotel Name</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="hotelTableBody"></tbody>
+    </table>
+</div>
+
+<!-- Modal for Creating/Updating Hotel -->
+<div class="modal fade" id="hotelModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="hotelModalLabel">Add Hotel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="hotelId">
+                <div class="mb-3">
+                    <label for="hotelName" class="form-label">Hotel Name</label>
+                    <input type="text" class="form-control" id="hotelName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="hotelPrice" class="form-label">Price</label>
+                    <input type="number" class="form-control" id="hotelPrice" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveHotelBtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    function deleteRow(btn) {
-        let row = btn.parentNode.parentNode;
-        row.parentNode.removeChild(row);
+    document.addEventListener("DOMContentLoaded", fetchHotels);
+
+    function fetchHotels() {
+        fetch("/admin/getAllHotels")
+            .then(res => res.json())
+            .then(data => {
+                if (data.code === 1000) {
+                    const tableBody = document.getElementById("hotelTableBody");
+                    tableBody.innerHTML = "";
+                    data.data.forEach(hotel => {
+                        tableBody.innerHTML += `
+                            <tr>
+                                <td>${hotel.id}</td>
+                                <td>${hotel.hotelName}</td>
+                                <td>${hotel.hotelPrice}</td>
+                                <td>
+                                    <button class="btn btn-warning" onclick="editHotel(${hotel.id}, '${hotel.hotelName}', ${hotel.hotelPrice})">Update</button>
+                                </td>
+                            </tr>`;
+                    });
+                }
+            });
     }
 
-    function addBooking() {
-        let table = document.getElementById("bookingTable").getElementsByTagName('tbody')[0];
-        let newRow = table.insertRow();
-        let cell1 = newRow.insertCell(0);
-        let cell2 = newRow.insertCell(1);
-        let cell3 = newRow.insertCell(2);
+    function editHotel(id, name, price) {
+        document.getElementById("hotelId").value = id;
+        document.getElementById("hotelName").value = name;
+        document.getElementById("hotelPrice").value = price;
+        document.getElementById("hotelModalLabel").textContent = "Update Hotel";
+        document.getElementById("saveHotelBtn").setAttribute("onclick", "updateHotel()");
+        new bootstrap.Modal(document.getElementById("hotelModal")).show();
+    }
 
-        cell1.textContent = "New Hotel";
-        cell2.textContent = "$100";
-        cell3.innerHTML = '<button class="delete-btn" onclick="deleteRow(this)">Xóa</button>';
+    function updateHotel() {
+        const id = document.getElementById("hotelId").value;
+        const updatedHotel = {
+            hotelName: document.getElementById("hotelName").value,
+            price: document.getElementById("hotelPrice").value
+        };
+        fetch(`/admin/updateHotel/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedHotel)
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.code === 1000) {
+                    alert("Hotel updated successfully!");
+                    fetchHotels();
+                    bootstrap.Modal.getInstance(document.getElementById("hotelModal")).hide();
+                }else {
+                    alert("Not successfully");
+                }
+            });
     }
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", fetchHotels);
+
+    // Khi nhấn "Create New Hotel", chuẩn bị modal
+    document.querySelector('[data-bs-target="#addHotelModal"]').addEventListener("click", function() {
+        document.getElementById("hotelId").value = "";
+        document.getElementById("hotelName").value = "";
+        document.getElementById("hotelPrice").value = "";
+        document.getElementById("hotelModalLabel").textContent = "Add Hotel";
+        document.getElementById("saveHotelBtn").setAttribute("onclick", "createHotel()");
+        new bootstrap.Modal(document.getElementById("hotelModal")).show();
+    });
+
+    function createHotel() {
+        const newHotel = {
+            hotelName: document.getElementById("hotelName").value,
+            price: document.getElementById("hotelPrice").value
+        };
+
+        fetch("/admin/createHotel", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newHotel)
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.code === 1000) {
+                    alert("Hotel added successfully!");
+                    fetchHotels();
+                    bootstrap.Modal.getInstance(document.getElementById("hotelModal")).hide();
+                } else {
+                    alert("Failed to add hotel. Please try again.");
+                }
+            });
+    }
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

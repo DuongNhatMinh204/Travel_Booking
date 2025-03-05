@@ -57,6 +57,20 @@ public class FlightServiceImpl implements FlightService {
         if(!flightDTO.getCheckInDate().before(flightDTO.getCheckOutDate())){
             throw new IllegalArgumentException(String.valueOf(ErrorCode.DATE_TIME_NOT_VALID));
         }
+        // tính lại số ghế thừa
+
+        if(flightDTO.getNumberOfChairs() >= flight.getNumberOfChairs()){
+            flight.setSeatAvailable(flight.getSeatAvailable()+flightDTO.getNumberOfChairs()-flight.getNumberOfChairs());
+        }else {
+            int soGheDaDuocDat = flight.getNumberOfChairs()-flight.getSeatAvailable();
+            if(flightDTO.getNumberOfChairs()<soGheDaDuocDat){
+                throw new AppException(ErrorCode.NUMBER_CHAIR_NOT_VALID);
+            }else{
+                flight.setSeatAvailable(flightDTO.getNumberOfChairs()-soGheDaDuocDat);
+            }
+        }
+
+
         flight.setTicketClass(flightDTO.getTicketClass());
         flight.setAirlineName(flightDTO.getAirlineName());
         flight.setPrice(flightDTO.getPrice());

@@ -21,6 +21,8 @@ public enum ErrorCode {
     NOT_EXISTS(1013,"object not exists", HttpStatus.BAD_REQUEST),
     NOT_VALID_FLIGHT_DATE(1014,"ngày bay không phú hợp với lịch tour", HttpStatus.BAD_REQUEST),
     DATE_INVALID(1015,"ngày check-in khách sạn phải sau ngày đi", HttpStatus.BAD_REQUEST),
+    NUMBER_CHAIR_NOT_VALID(1016,"Không thể thay đổi số ghế ít hơn số ghế đã được đặt", HttpStatus.BAD_REQUEST),
+    PRICE_NOT_VALID(1017,"price not valid", HttpStatus.BAD_REQUEST),
     ;
     private int code ;
     private String message;

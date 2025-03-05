@@ -19,6 +19,9 @@ public class    HotelServiceImpl implements HotelService {
     @Override
     public Hotel createHotel(HotelDTO hotelDTO) {
         Hotel hotel = new Hotel();
+        if(hotelDTO.getPrice() <0){
+            throw  new AppException(ErrorCode.PRICE_NOT_VALID);
+        }
         hotel.setHotelName(hotelDTO.getHotelName());
         hotel.setHotelPrice(hotelDTO.getPrice());
         return hotelRepository.save(hotel);
@@ -35,5 +38,16 @@ public class    HotelServiceImpl implements HotelService {
     public List<Hotel> getAllHotels() {
         List<Hotel> hotels = hotelRepository.findAll();
         return hotels;
+    }
+
+    @Override
+    public Hotel updateHotel(HotelDTO hotelDTO , Long hotelId){
+        if(hotelDTO.getPrice() <0){
+            throw  new AppException(ErrorCode.PRICE_NOT_VALID);
+        }
+        Hotel hotel = hotelRepository.findById(hotelId).orElseThrow(() -> new AppException(ErrorCode.HOTEL_NOT_FOUND));
+        hotel.setHotelName(hotelDTO.getHotelName());
+        hotel.setHotelPrice(hotelDTO.getPrice());
+        return hotelRepository.save(hotel);
     }
 }
