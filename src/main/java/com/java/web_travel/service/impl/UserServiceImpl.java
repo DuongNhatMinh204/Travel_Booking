@@ -8,10 +8,14 @@ import com.java.web_travel.exception.AppException;
 import com.java.web_travel.model.request.ChangePassDTO;
 import com.java.web_travel.model.request.UserCreateDTO;
 import com.java.web_travel.model.request.UserLoginDTO;
+import com.java.web_travel.model.response.PageResponse;
 import com.java.web_travel.repository.RoleRepository;
 import com.java.web_travel.repository.UserRepository;
 import com.java.web_travel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -83,9 +87,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users;
+    public PageResponse getAllUsers(int pageNo , int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<User> users = userRepository.findAll(pageable);
+
+        return PageResponse.builder()
+                .pageNo(pageNo)
+                .pageSize(pageSize)
+                .totalPages(users.getTotalPages())
+                .items(users.getContent())
+                .build();
     }
 
     @Override

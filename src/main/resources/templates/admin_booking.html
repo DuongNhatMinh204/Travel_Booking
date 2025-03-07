@@ -34,6 +34,18 @@
             padding: 10px;
             cursor: pointer;
         }
+        .pagination-btn {
+            margin: 5px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            background-color: white;
+        }
+
+        .pagination-btn:hover {
+            background-color: #f0f0f0;
+        }
+
     </style>
 </head>
 <body>
@@ -85,31 +97,30 @@
     <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
     </tbody>
 </table>
+<div id="pagination" style="margin-top: 20px; text-align: center"></div>
 
 <script>
+
+    let currentPage = 0; // Trang hiện tại
+    const pageSize = 5; // Số lượng đơn hàng mỗi trang
     document.addEventListener("DOMContentLoaded", function () {
-        console.log("DOM fully loaded");
-        fetch("/order/getAllOrder")
-            .then(response => {
-                console.log("API Response:", response);
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
+        fetchOrders(currentPage);
+    });
+
+    function fetchOrders(page) {
+        fetch(`/order/getAllOrder?pageNo=${page}&pageSize=${pageSize}`)
+            .then(response => response.json())
             .then(data => {
-                console.log("Data:", data);
-                if (data.code === 1000 && data.data.length > 0) {
-                    console.log("Rendering table with data:", data.data);
-                    renderOrderTable(data.data);
+                if (data.code === 1000 && data.data.items.length > 0) {
+                    renderOrderTable(data.data.items);
+                    renderPagination(data.data.totalPages);
                 } else {
                     console.error("No orders found or API returned error:", data.message);
                 }
             })
-            .catch(error => {
-                console.error("Error fetching orders:", error);
-            });
-    });
+            .catch(error => console.error("Error fetching orders:", error));
+    }
+
 
     function renderOrderTable(orders) {
         const tableBody = document.querySelector("#bookingTable tbody");
@@ -151,6 +162,25 @@
         if (!dateTimeString) return "N/A";
         const date = new Date(dateTimeString);
         return date.toLocaleString(); // Định dạng ngày và giờ theo local
+    }
+    function renderPagination(totalPages) {
+        const paginationContainer = document.getElementById("pagination");
+        paginationContainer.innerHTML = ""; // Xóa các nút cũ
+
+        for (let i = 0; i < totalPages; i++) {
+            const button = document.createElement("button");
+            button.textContent = i + 1;
+            button.classList.add("pagination-btn");
+            if (i === currentPage) {
+                button.style.backgroundColor = "#4CAF50"; // Màu khi active
+                button.style.color = "white";
+            }
+            button.onclick = function () {
+                currentPage = i;
+                fetchOrders(currentPage);
+            };
+            paginationContainer.appendChild(button);
+        }
     }
 
     function deleteOrder(orderId) {

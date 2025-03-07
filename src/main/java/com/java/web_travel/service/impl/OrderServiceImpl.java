@@ -8,12 +8,16 @@ import com.java.web_travel.enums.ErrorCode;
 import com.java.web_travel.exception.AppException;
 import com.java.web_travel.model.request.OrderDTO;
 import com.java.web_travel.model.request.OrderHotelDTO;
+import com.java.web_travel.model.response.PageResponse;
 import com.java.web_travel.repository.FlightRepository;
 import com.java.web_travel.repository.HotelRepository;
 import com.java.web_travel.repository.OrderRepository;
 import com.java.web_travel.repository.UserRepository;
 import com.java.web_travel.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -126,8 +130,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public PageResponse getAllOrders(int pageNo , int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Order> orders = orderRepository.findAll(pageable);
+
+        return PageResponse.builder()
+                .pageNo(pageNo)
+                .pageSize(pageSize)
+                .totalPages(orders.getTotalPages())
+                .items(orders.getContent())
+                .build();
     }
 
 }

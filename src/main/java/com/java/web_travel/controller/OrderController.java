@@ -4,6 +4,7 @@ import com.java.web_travel.entity.Order;
 import com.java.web_travel.model.request.OrderDTO;
 import com.java.web_travel.model.request.OrderHotelDTO;
 import com.java.web_travel.model.response.ApiReponse;
+import com.java.web_travel.model.response.PageResponse;
 import com.java.web_travel.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -85,12 +86,15 @@ public class OrderController {
         return apiReponse;
     }
     @GetMapping("/getAllOrder")
-    public ApiReponse<List<Order>> getAllOrder() {
-        log.info("Start get all order");
-        ApiReponse<List<Order>> apiReponse = new ApiReponse<>();
-        apiReponse.setData(orderService.getAllOrders());
-        apiReponse.setMessage("success");
-        log.info("Get all order successfully");
-        return apiReponse;
+    public ApiReponse<PageResponse> getAllOrder(@RequestParam(defaultValue = "0",required = false) int pageNo,
+                                                @RequestParam(defaultValue = "5",required = false) int pageSize) {
+        log.info("Start get order of user id = {}",pageNo);
+        try{
+            PageResponse<?> orders = orderService.getAllOrders(pageNo,pageSize)  ;
+            return new ApiReponse<>(1000,"get success",orders);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new ApiReponse<>(7777,e.getMessage(),null);
+        }
     }
 }

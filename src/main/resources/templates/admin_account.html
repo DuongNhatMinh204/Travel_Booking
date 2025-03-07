@@ -124,36 +124,38 @@
     <button>1</button>
     <button>Tiếp</button>
 </div>
-
 <script>
+    let currentPage = 0;
+    const pageSize = 5;
+
     document.addEventListener("DOMContentLoaded", function () {
-        console.log("DOM fully loaded");
-        fetch("/user/allUsers") // Gọi API để lấy danh sách người dùng
+        loadUsers(currentPage, pageSize);
+    });
+
+    function loadUsers(pageNo, pageSize) {
+        fetch(`/user/allUsers?pageNo=${pageNo}&pageSize=${pageSize}`)
             .then(response => {
-                console.log("API Response:", response);
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }
                 return response.json();
             })
             .then(data => {
-                console.log("Data:", data);
-                if (data.code === 1000 && data.data.length > 0) {
-                    console.log("Rendering table with data:", data.data);
-                    renderUserTable(data.data);
+                if (data.code === 1000) {
+                    renderUserTable(data.data.items);
+                    renderPagination(data.data.totalPages);
                 } else {
-                    console.error("No users found or API returned error:", data.message);
+                    console.error("Error fetching users: ", data.message);
                 }
             })
             .catch(error => {
                 console.error("Error fetching users:", error);
             });
-    });
+    }
 
     function renderUserTable(users) {
         const tableBody = document.querySelector("#userTable tbody");
-        tableBody.innerHTML = ""; // Xóa dữ liệu cũ (nếu có)
-
+        tableBody.innerHTML = "";
         users.forEach(user => {
             const row = document.createElement("tr");
             row.innerHTML = `
@@ -163,7 +165,6 @@
                 <td>${user.status ? "Hoạt động" : "Bị khóa"}</td>
                 <td>
                     <div class="action-buttons">
-
                         <button class="toggle-status-btn" onclick="toggleStatus(${user.id})">
                             ${user.status ? "Khóa" : "Mở khóa"}
                         </button>
@@ -174,11 +175,47 @@
         });
     }
 
+    function renderPagination(totalPages) {
+        const paginationContainer = document.querySelector(".pagination");
+        paginationContainer.innerHTML = "";
+
+        const prevButton = document.createElement("button");
+        prevButton.textContent = "Lùi";
+        prevButton.disabled = currentPage === 0;
+        prevButton.onclick = function () {
+            if (currentPage > 0) {
+                currentPage--;
+                loadUsers(currentPage, pageSize);
+            }
+        };
+        paginationContainer.appendChild(prevButton);
+
+        for (let i = 0; i < totalPages; i++) {
+            const pageButton = document.createElement("button");
+            pageButton.textContent = i + 1;
+            pageButton.classList.toggle("active", i === currentPage);
+            pageButton.onclick = function () {
+                currentPage = i;
+                loadUsers(currentPage, pageSize);
+            };
+            paginationContainer.appendChild(pageButton);
+        }
+
+        const nextButton = document.createElement("button");
+        nextButton.textContent = "Tiếp";
+        nextButton.disabled = currentPage >= totalPages - 1;
+        nextButton.onclick = function () {
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                loadUsers(currentPage, pageSize);
+            }
+        };
+        paginationContainer.appendChild(nextButton);
+    }
+
     function toggleStatus(userId) {
         if (confirm("Bạn có chắc chắn muốn thay đổi trạng thái tài khoản này không?")) {
-            fetch(`/user/changeStatus/${userId}`, {
-                method: "PATCH",
-            })
+            fetch(`/user/changeStatus/${userId}`, { method: "PATCH" })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error("Network response was not ok");
@@ -188,9 +225,7 @@
                 .then(data => {
                     if (data.code === 1000) {
                         alert("Thay đổi trạng thái thành công!");
-                        fetch("/user/allUsers")
-                            .then(response => response.json())
-                            .then(data => renderUserTable(data.data));
+                        loadUsers(currentPage, pageSize);
                     } else {
                         alert("Thay đổi trạng thái thất bại: " + data.message);
                     }
@@ -200,11 +235,88 @@
                 });
         }
     }
-
-    function toggleFilter() {
-        const filterContainer = document.getElementById("filterContainer");
-        filterContainer.style.display = filterContainer.style.display === "none" ? "block" : "none";
-    }
 </script>
+
+<!--<script>-->
+<!--    document.addEventListener("DOMContentLoaded", function () {-->
+<!--        console.log("DOM fully loaded");-->
+<!--        fetch("/user/allUsers") // Gọi API để lấy danh sách người dùng-->
+<!--            .then(response => {-->
+<!--                console.log("API Response:", response);-->
+<!--                if (!response.ok) {-->
+<!--                    throw new Error("Network response was not ok");-->
+<!--                }-->
+<!--                return response.json();-->
+<!--            })-->
+<!--            .then(data => {-->
+<!--                console.log("Data:", data);-->
+<!--                if (data.code === 1000 && data.data.length > 0) {-->
+<!--                    console.log("Rendering table with data:", data.data);-->
+<!--                    renderUserTable(data.data);-->
+<!--                } else {-->
+<!--                    console.error("No users found or API returned error:", data.message);-->
+<!--                }-->
+<!--            })-->
+<!--            .catch(error => {-->
+<!--                console.error("Error fetching users:", error);-->
+<!--            });-->
+<!--    });-->
+
+<!--    function renderUserTable(users) {-->
+<!--        const tableBody = document.querySelector("#userTable tbody");-->
+<!--        tableBody.innerHTML = ""; // Xóa dữ liệu cũ (nếu có)-->
+
+<!--        users.forEach(user => {-->
+<!--            const row = document.createElement("tr");-->
+<!--            row.innerHTML = `-->
+<!--                <td>${user.fullName}</td>-->
+<!--                <td>${user.phone}</td>-->
+<!--                <td>${user.email}</td>-->
+<!--                <td>${user.status ? "Hoạt động" : "Bị khóa"}</td>-->
+<!--                <td>-->
+<!--                    <div class="action-buttons">-->
+
+<!--                        <button class="toggle-status-btn" onclick="toggleStatus(${user.id})">-->
+<!--                            ${user.status ? "Khóa" : "Mở khóa"}-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                </td>-->
+<!--            `;-->
+<!--            tableBody.appendChild(row);-->
+<!--        });-->
+<!--    }-->
+
+<!--    function toggleStatus(userId) {-->
+<!--        if (confirm("Bạn có chắc chắn muốn thay đổi trạng thái tài khoản này không?")) {-->
+<!--            fetch(`/user/changeStatus/${userId}`, {-->
+<!--                method: "PATCH",-->
+<!--            })-->
+<!--                .then(response => {-->
+<!--                    if (!response.ok) {-->
+<!--                        throw new Error("Network response was not ok");-->
+<!--                    }-->
+<!--                    return response.json();-->
+<!--                })-->
+<!--                .then(data => {-->
+<!--                    if (data.code === 1000) {-->
+<!--                        alert("Thay đổi trạng thái thành công!");-->
+<!--                        fetch("/user/allUsers")-->
+<!--                            .then(response => response.json())-->
+<!--                            .then(data => renderUserTable(data.data));-->
+<!--                    } else {-->
+<!--                        alert("Thay đổi trạng thái thất bại: " + data.message);-->
+<!--                    }-->
+<!--                })-->
+<!--                .catch(error => {-->
+<!--                    console.error("Error toggling status:", error);-->
+<!--                });-->
+<!--        }-->
+<!--    }-->
+
+<!--    function toggleFilter() {-->
+<!--        const filterContainer = document.getElementById("filterContainer");-->
+<!--        filterContainer.style.display = filterContainer.style.display === "none" ? "block" : "none";-->
+<!--    }-->
+<!--</script>-->
 </body>
 </html>

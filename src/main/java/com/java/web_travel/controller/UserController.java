@@ -5,6 +5,7 @@ import com.java.web_travel.model.request.ChangePassDTO;
 import com.java.web_travel.model.request.UserCreateDTO;
 import com.java.web_travel.model.request.UserLoginDTO;
 import com.java.web_travel.model.response.ApiReponse;
+import com.java.web_travel.model.response.PageResponse;
 import com.java.web_travel.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -50,15 +51,20 @@ public class UserController {
         log.info("User change password success");
         return new ApiReponse<>(1000,"success") ;
     }
+
     @GetMapping("/allUsers")
-    public ApiReponse<List<User>> getAllUsers() {
-        log.info("User getAllUsers");
-        ApiReponse<List<User>> apiReponse = new ApiReponse<>();
-        apiReponse.setData(userService.getAllUsers());
-        apiReponse.setMessage("get all users success");
-        log.info("User getAllUsers success");
-        return apiReponse ;
+    public ApiReponse<PageResponse> getAllUsers(@RequestParam(defaultValue = "0",required = false) int pageNo,
+                                                @RequestParam(defaultValue = "5",required = false) int pageSize) {
+        log.info("User getAllUsers , pageNo = {}, pageSize = {}", pageNo, pageSize);
+        try{
+            PageResponse<?> users = userService.getAllUsers(pageNo,pageSize) ;
+            return new ApiReponse<>(1000,"get all users success",users);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new ApiReponse<>(7777,e.getMessage(),null);
+        }
     }
+
     @PatchMapping("/changeStatus/{id}")
     public ApiReponse<User> changeStatus(@PathVariable Long id) {
         log.info("User change status id = {} : ", id);
