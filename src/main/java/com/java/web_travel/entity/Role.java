@@ -3,12 +3,20 @@ package com.java.web_travel.entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.java.web_travel.enums.RoleCode;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "roles")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,34 +28,9 @@ public class Role {
 
     @OneToMany(mappedBy = "role" , cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<User> users;
-    public Role() {
 
-    }
     public Role(RoleCode roleCode) {
         this.roleCode = roleCode;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public RoleCode getRoleCode() {
-        return roleCode;
-    }
-
-    public void setRoleCode(RoleCode roleCode) {
-        this.roleCode = roleCode;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
 }

@@ -5,11 +5,13 @@ import com.java.web_travel.model.request.HotelDTO;
 import com.java.web_travel.model.response.ApiReponse;
 import com.java.web_travel.service.HotelService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/admin")
 public class HotelController {
@@ -18,21 +20,27 @@ public class HotelController {
 
     @PostMapping("/createHotel")
     public ApiReponse<Hotel> createHotel(@Valid @RequestBody HotelDTO hotelDTO) {
+        log.info("Create hotelDTO: {}", hotelDTO);
         ApiReponse<Hotel> apiReponse = new ApiReponse<>();
         apiReponse.setData(hotelService.createHotel(hotelDTO));
+        log.info("Created hotel successfully: {}", apiReponse.getData());
         return apiReponse;
     }
     @GetMapping("/getAllHotels")
     public ApiReponse<List<Hotel>> getAllHotels() {
+        log.info(("Get all hotels "));
         ApiReponse<List<Hotel>> apiReponse = new ApiReponse<>();
         apiReponse.setData(hotelService.getAllHotels());
         apiReponse.setMessage("Success");
+        log.info("Get all hotels successfully: {}", apiReponse.getData());
         return apiReponse;
     }
     @PutMapping("/updateHotel/{id}")
     public  ApiReponse<Hotel> updateHotel(@Valid @RequestBody HotelDTO hotelDTO,@PathVariable Long id) {
+        log.info("Update hotelDTO id =  : {}", id);
         ApiReponse<Hotel> apiReponse = new ApiReponse<>();
         apiReponse.setData(hotelService.updateHotel(hotelDTO,id));
+        log.info("Update hotel successfully id = : {}", id);
         return apiReponse;
     }
 }

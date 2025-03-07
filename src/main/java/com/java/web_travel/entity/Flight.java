@@ -3,13 +3,23 @@ package com.java.web_travel.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.java.web_travel.enums.TicketClass;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
 
+
 @Entity
 @Table(name = "flight")
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+
 public class Flight {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,89 +47,5 @@ public class Flight {
     @JsonIgnore
     private List<Order> orders ;
 
-    public Flight() {
-    }
 
-    public Flight(Long id, TicketClass ticketClass, String airlineName, double price, Date checkInDate, Date checkOutDate, int numberOfChairs) {
-        this.id = id;
-        this.ticketClass = ticketClass;
-        this.airlineName = airlineName;
-        this.price = price;
-        this.checkInDate = checkInDate;
-        this.checkOutDate = checkOutDate;
-        this.numberOfChairs = numberOfChairs;
-        this.seatAvailable = numberOfChairs;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public TicketClass getTicketClass() {
-        return ticketClass;
-    }
-
-    public void setTicketClass(TicketClass ticketClass) {
-        this.ticketClass = ticketClass;
-    }
-
-    public String getAirlineName() {
-        return airlineName;
-    }
-
-    public void setAirlineName(String airlineName) {
-        this.airlineName = airlineName;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public Date getCheckInDate() {
-        return checkInDate;
-    }
-
-    public void setCheckInDate(Date checkInDate) {
-        this.checkInDate = checkInDate;
-    }
-
-    public Date getCheckOutDate() {
-        return checkOutDate;
-    }
-
-    public void setCheckOutDate(Date checkOutDate) {
-        this.checkOutDate = checkOutDate;
-    }
-
-    public int getNumberOfChairs() {
-        return numberOfChairs;
-    }
-
-    public void setNumberOfChairs(int numberOfChairs) {
-        this.numberOfChairs = numberOfChairs;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
-    public int getSeatAvailable() {
-        return seatAvailable;
-    }
-
-    public void setSeatAvailable(int seatAvailable) {
-        this.seatAvailable = seatAvailable;
-    }
 }

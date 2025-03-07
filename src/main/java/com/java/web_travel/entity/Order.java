@@ -2,12 +2,20 @@ package com.java.web_travel.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 @Entity
 @Table(name = "orders")
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,7 +70,6 @@ public class Order {
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 
-    public Order() {}
 
     public Order(String destination, int numberOfPeople, Date checkinDate, Date checkoutDate) {
         this.destination = destination;
@@ -71,108 +78,4 @@ public class Order {
         this.checkoutDate = checkoutDate;
     }
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
-
-    public int getNumberOfPeople() {
-        return numberOfPeople;
-    }
-
-    public void setNumberOfPeople(int numberOfPeople) {
-        this.numberOfPeople = numberOfPeople;
-    }
-
-    public Date getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public Date getCheckinDate() {
-        return checkinDate;
-    }
-
-    public void setCheckinDate(Date checkinDate) {
-        this.checkinDate = checkinDate;
-    }
-
-    public Date getCheckoutDate() {
-        return checkoutDate;
-    }
-
-    public void setCheckoutDate(Date checkoutDate) {
-        this.checkoutDate = checkoutDate;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Payment getPayment() {
-        return payment;
-    }
-
-    public void setPayment(Payment payment) {
-        this.payment = payment;
-    }
-
-    public Flight getFlight() {
-        return flight;
-    }
-
-    public void setFlight(Flight flight) {
-        this.flight = flight;
-    }
-
-    public Date getStartHotel() {
-        return startHotel;
-    }
-
-    public void setStartHotel(Date startHotel) {
-        this.startHotel = startHotel;
-    }
-
-    public Date getEndHotel() {
-        return endHotel;
-    }
-
-    public void setEndHotel(Date endHotel) {
-        this.endHotel = endHotel;
-    }
-
-    public Hotel getHotel() {
-        return hotel;
-    }
-
-    public void setHotel(Hotel hotel) {
-        this.hotel = hotel;
-    }
-
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
 }
