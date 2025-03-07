@@ -4,10 +4,15 @@ import com.java.web_travel.enums.TicketClass;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
-
+@Getter
+@Setter
+@AllArgsConstructor
 public class FlightDTO {
     @NotNull(message ="ARGUMENT_NOT_VALID" )
     private TicketClass ticketClass;
@@ -24,63 +29,63 @@ public class FlightDTO {
     @Min(0)
     private int numberOfChairs ;
 
-    public FlightDTO() {
-    }
-
-    public FlightDTO(TicketClass ticketClass, String airlineName, double price, Date checkInDate, Date checkOutDate, int numberOfChairs) {
-        this.ticketClass = ticketClass;
-        this.airlineName = airlineName;
-        this.price = price;
-        this.checkInDate = checkInDate;
-        this.checkOutDate = checkOutDate;
-        this.numberOfChairs = numberOfChairs;
-    }
-
-    public TicketClass getTicketClass() {
-        return ticketClass;
-    }
-
-    public void setTicketClass(TicketClass ticketClass) {
-        this.ticketClass = ticketClass;
-    }
-
-    public String getAirlineName() {
-        return airlineName;
-    }
-
-    public void setAirlineName(String airlineName) {
-        this.airlineName = airlineName;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public Date getCheckInDate() {
-        return checkInDate;
-    }
-
-    public void setCheckInDate(Date checkInDate) {
-        this.checkInDate = checkInDate;
-    }
-
-    public Date getCheckOutDate() {
-        return checkOutDate;
-    }
-
-    public void setCheckOutDate(Date checkOutDate) {
-        this.checkOutDate = checkOutDate;
-    }
-
-    public int getNumberOfChairs() {
-        return numberOfChairs;
-    }
-
-    public void setNumberOfChairs(int numberOfChairs) {
-        this.numberOfChairs = numberOfChairs;
-    }
+//    public FlightDTO() {
+//    }
+//
+//    public FlightDTO(TicketClass ticketClass, String airlineName, double price, Date checkInDate, Date checkOutDate, int numberOfChairs) {
+//        this.ticketClass = ticketClass;
+//        this.airlineName = airlineName;
+//        this.price = price;
+//        this.checkInDate = checkInDate;
+//        this.checkOutDate = checkOutDate;
+//        this.numberOfChairs = numberOfChairs;
+//    }
+//
+//    public TicketClass getTicketClass() {
+//        return ticketClass;
+//    }
+//
+//    public void setTicketClass(TicketClass ticketClass) {
+//        this.ticketClass = ticketClass;
+//    }
+//
+//    public String getAirlineName() {
+//        return airlineName;
+//    }
+//
+//    public void setAirlineName(String airlineName) {
+//        this.airlineName = airlineName;
+//    }
+//
+//    public double getPrice() {
+//        return price;
+//    }
+//
+//    public void setPrice(double price) {
+//        this.price = price;
+//    }
+//
+//    public Date getCheckInDate() {
+//        return checkInDate;
+//    }
+//
+//    public void setCheckInDate(Date checkInDate) {
+//        this.checkInDate = checkInDate;
+//    }
+//
+//    public Date getCheckOutDate() {
+//        return checkOutDate;
+//    }
+//
+//    public void setCheckOutDate(Date checkOutDate) {
+//        this.checkOutDate = checkOutDate;
+//    }
+//
+//    public int getNumberOfChairs() {
+//        return numberOfChairs;
+//    }
+//
+//    public void setNumberOfChairs(int numberOfChairs) {
+//        this.numberOfChairs = numberOfChairs;
+//    }
 }
