@@ -76,19 +76,22 @@ public class OrderController {
         return apiReponse;
     }
     @GetMapping("/{id}")
-    public ApiReponse<List<Order>> getOrderById(@PathVariable Long id) {
+    public ApiReponse<PageResponse> getOrderById(@PathVariable Long id,
+                                                @RequestParam(defaultValue = "0",required = false) int pageNo,
+                                                @RequestParam(defaultValue = "5",required = false) int pageSize) {
         log.info("Start get order of user id = {}",id);
-        ApiReponse<List<Order>> apiReponse = new ApiReponse<>();
-        List<Order> orderList = orderService.getOrdersByUserId(id) ;
-        apiReponse.setData(orderList);
-        apiReponse.setMessage("success");
-        log.info("Get order successfully of user id = {}",id);
-        return apiReponse;
+        try{
+            PageResponse<?> orders = orderService.getOrdersByUserId(id,pageNo,pageSize);
+            return new ApiReponse<>(1000,"get order by id success " , orders) ;
+        }catch (Exception e){
+            log.error(e.getMessage(),e);
+            return new ApiReponse<>(7777,e.getMessage(),null);
+        }
     }
     @GetMapping("/getAllOrder")
     public ApiReponse<PageResponse> getAllOrder(@RequestParam(defaultValue = "0",required = false) int pageNo,
                                                 @RequestParam(defaultValue = "5",required = false) int pageSize) {
-        log.info("Start get order of user id = {}",pageNo);
+        log.info("Start get order : {}",pageNo);
         try{
             PageResponse<?> orders = orderService.getAllOrders(pageNo,pageSize)  ;
             return new ApiReponse<>(1000,"get success",orders);

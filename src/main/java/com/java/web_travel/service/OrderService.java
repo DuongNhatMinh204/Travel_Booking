@@ -14,6 +14,6 @@ public interface OrderService {
     public Order chooseFlight(Long orderId , Long flightId);
     public void cancelOrder(Long orderId);
     public Order cancelFlight(Long orderId) ;
-    public List<Order> getOrdersByUserId(Long userId);
+    public PageResponse getOrdersByUserId(Long userId,int pageNo, int pageSize);
     public PageResponse getAllOrders(int pageNo, int pageSize);
 }

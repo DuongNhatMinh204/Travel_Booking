@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -124,9 +125,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getOrdersByUserId(Long userId) {
-        List<Order> orderList = orderRepository.findByUserId(userId);
-        return orderList;
+    public PageResponse getOrdersByUserId(Long userId , int pageNo , int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        User user = userRepository.findById(userId).get();
+        Page<Order> orders = orderRepository.findByUser(user,pageable) ;
+
+        return PageResponse.builder()
+                .pageNo(pageNo)
+                .pageSize(pageSize)
+                .totalPages(orders.getTotalPages())
+                .items(orders)
+                .build();
     }
 
     @Override
