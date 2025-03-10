@@ -1,5 +1,6 @@
 package com.java.web_travel.repository;
 
+import com.java.web_travel.entity.Flight;
 import com.java.web_travel.entity.Order;
 import com.java.web_travel.entity.User;
 import org.springframework.data.domain.Page;
@@ -14,4 +15,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     public List<Order> findByUserId(Long userId);
 
     Page<Order> findByUser(User user, Pageable pageable);
+
+    List<Order> findByFlight(Flight flight);
 }

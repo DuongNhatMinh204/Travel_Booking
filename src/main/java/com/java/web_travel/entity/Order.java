@@ -63,7 +63,7 @@ public class Order {
     private Payment payment;
 
     @ManyToOne
-    @JoinColumn(name = "flight_id")
+    @JoinColumn(name = "flight_id",nullable = true)
     private Flight flight;
 
     @ManyToOne

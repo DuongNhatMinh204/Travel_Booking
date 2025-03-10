@@ -43,7 +43,7 @@ public class Flight {
     @Column(name = "seatAvailable")
     private int seatAvailable ;
 
-    @OneToMany(mappedBy = "flight" ,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "flight" ,cascade = CascadeType.PERSIST)
     @JsonIgnore
     private List<Order> orders ;
 

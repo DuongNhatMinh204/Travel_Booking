@@ -15,5 +15,7 @@ public interface OrderService {
     public void cancelOrder(Long orderId);
     public Order cancelFlight(Long orderId) ;
     public PageResponse getOrdersByUserId(Long userId,int pageNo, int pageSize);
-    public PageResponse getAllOrders(int pageNo, int pageSize);
+    public PageResponse getAllOrders(int pageNo, int pageSize,String sortBy);
+    public PageResponse getAllOrdersByMultipleColumns(int pageNo, int pageSize,String... sorts); // String... == List<String>
+    public PageResponse getAllOrderWithSortByMultipleColumsAndSearch(int pageNo, int pageSize,String search,String sortBy);
 }

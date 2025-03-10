@@ -1,10 +1,12 @@
 package com.java.web_travel.service.impl;
 
 import com.java.web_travel.entity.Flight;
+import com.java.web_travel.entity.Order;
 import com.java.web_travel.enums.ErrorCode;
 import com.java.web_travel.exception.AppException;
 import com.java.web_travel.model.request.FlightDTO;
 import com.java.web_travel.repository.FlightRepository;
+import com.java.web_travel.repository.OrderRepository;
 import com.java.web_travel.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ import java.util.List;
 public class FlightServiceImpl implements FlightService {
     @Autowired
     private FlightRepository flightRepository;
+    @Autowired
+    private OrderRepository orderRepository;
+
     @Override
     public Flight createFlight(FlightDTO flightDTO) {
         // check xem ngày check in có sau thời điểm hiện tại không
@@ -40,7 +45,14 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public void deleteFlight(Long id) {
+
         Flight flight = flightRepository.findById(id).get();
+        //trước khi xóa chuyến bay cập nhật ở bảng order trước
+        List<Order> orders = orderRepository.findByFlight(flight) ;
+        for(Order order : orders){
+            order.setFlight(null);
+        }
+        orderRepository.saveAll(orders);
         flightRepository.delete(flight);
         return ;
     }

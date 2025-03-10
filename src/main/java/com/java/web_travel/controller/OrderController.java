@@ -90,10 +90,38 @@ public class OrderController {
     }
     @GetMapping("/getAllOrder")
     public ApiReponse<PageResponse> getAllOrder(@RequestParam(defaultValue = "0",required = false) int pageNo,
-                                                @RequestParam(defaultValue = "5",required = false) int pageSize) {
+                                                @RequestParam(defaultValue = "5",required = false) int pageSize,
+                                                @RequestParam(required = false) String sortBy) {
         log.info("Start get order : {}",pageNo);
         try{
-            PageResponse<?> orders = orderService.getAllOrders(pageNo,pageSize)  ;
+            PageResponse<?> orders = orderService.getAllOrders(pageNo,pageSize,sortBy)  ;
+            return new ApiReponse<>(1000,"get success",orders);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new ApiReponse<>(7777,e.getMessage(),null);
+        }
+    }
+    @GetMapping("/getAllOrderWithMultipleColumns")
+    public ApiReponse<PageResponse> getAllOrderWithSortByMultipleColums(@RequestParam(defaultValue = "0",required = false) int pageNo,
+                                                @RequestParam(defaultValue = "5",required = false) int pageSize,
+                                                @RequestParam(required = false) String... sort) {
+        log.info("Start get order with sort by multiple columns : ");
+        try{
+            PageResponse<?> orders = orderService.getAllOrdersByMultipleColumns(pageNo,pageSize,sort)  ;
+                return new ApiReponse<>(1000,"get success",orders);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new ApiReponse<>(7777,e.getMessage(),null);
+        }
+    }
+    @GetMapping("/getAllOrderWithMultipleColumnsWithSearch")
+    public ApiReponse<PageResponse> getAllOrderWithSortByMultipleColumsAndSearch(@RequestParam(defaultValue = "0",required = false) int pageNo,
+                                                                        @RequestParam(defaultValue = "5",required = false) int pageSize,
+                                                                        @RequestParam(defaultValue = "5", required = false) String search,
+                                                                        @RequestParam(required = false) String sortBy) {
+        log.info("Start get order with sort by  columns and search : ");
+        try{
+            PageResponse<?> orders = orderService.getAllOrderWithSortByMultipleColumsAndSearch(pageNo,pageSize,search,sortBy)  ;
             return new ApiReponse<>(1000,"get success",orders);
         } catch (Exception e) {
             log.error(e.getMessage());

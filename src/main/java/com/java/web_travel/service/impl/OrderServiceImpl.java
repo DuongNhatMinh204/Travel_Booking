@@ -9,20 +9,21 @@ import com.java.web_travel.exception.AppException;
 import com.java.web_travel.model.request.OrderDTO;
 import com.java.web_travel.model.request.OrderHotelDTO;
 import com.java.web_travel.model.response.PageResponse;
-import com.java.web_travel.repository.FlightRepository;
-import com.java.web_travel.repository.HotelRepository;
-import com.java.web_travel.repository.OrderRepository;
-import com.java.web_travel.repository.UserRepository;
+import com.java.web_travel.repository.*;
 import com.java.web_travel.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -34,6 +35,8 @@ public class OrderServiceImpl implements OrderService {
     private HotelRepository hotelRepository;
     @Autowired
     private FlightRepository flightRepository;
+    @Autowired
+    private SearchRepository searchRepository;
     @Override
     public Order addOrder(OrderDTO orderDTO, Long userId) {
         Order order = new Order();
@@ -139,8 +142,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public PageResponse getAllOrders(int pageNo , int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+    public PageResponse getAllOrders(int pageNo , int pageSize,String sortBy) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        // xu ly sort by
+        if(StringUtils.hasLength(sortBy)) {
+            // orderDate:asc|desc
+            Pattern  pattern = Pattern.compile("(\\w+?)(:)(.*)");
+            Matcher matcher = pattern.matcher(sortBy);
+            if(matcher.find()) {
+                if(matcher.group(3).equalsIgnoreCase("asc")){
+                    sorts.add(new Sort.Order(Sort.Direction.ASC,matcher.group(1)));
+                }else {
+                    sorts.add(new Sort.Order(Sort.Direction.DESC,matcher.group(1)));
+                }
+            }
+
+        }
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sorts)); // phan trang co sap xep
         Page<Order> orders = orderRepository.findAll(pageable);
 
         return PageResponse.builder()
@@ -149,6 +167,38 @@ public class OrderServiceImpl implements OrderService {
                 .totalPages(orders.getTotalPages())
                 .items(orders.getContent())
                 .build();
+    }
+
+    @Override
+    public PageResponse getAllOrdersByMultipleColumns(int pageNo, int pageSize, String... sorts) {
+        List<Sort.Order> ordersSort = new ArrayList<>();
+        for (String sortBy : sorts) {
+            // orderDate:asc|desc
+            Pattern  pattern = Pattern.compile("(\\w+?)(:)(.*)");
+            Matcher matcher = pattern.matcher(sortBy);
+            if(matcher.find()) {
+                if(matcher.group(3).equalsIgnoreCase("asc")){
+                    ordersSort.add(new Sort.Order(Sort.Direction.ASC,matcher.group(1)));
+                }else {
+                    ordersSort.add(new Sort.Order(Sort.Direction.DESC,matcher.group(1)));
+                }
+            }
+        }
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(ordersSort)); // phan trang co sap xep
+        Page<Order> orders = orderRepository.findAll(pageable);
+
+        return PageResponse.builder()
+                .pageNo(pageNo)
+                .pageSize(pageSize)
+                .totalPages(orders.getTotalPages())
+                .items(orders.getContent())
+                .build();
+    }
+
+    @Override
+    public PageResponse getAllOrderWithSortByMultipleColumsAndSearch(int pageNo, int pageSize, String search, String sortBy) {
+        return searchRepository.getAllOrderWithSortByMultipleColumsAndSearch(pageNo,pageSize,search,sortBy);
     }
 
 }
