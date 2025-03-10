@@ -5,11 +5,14 @@ import com.java.web_travel.model.response.PageResponse;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Repository
 public class SearchRepository {
@@ -22,18 +25,50 @@ public class SearchRepository {
             // tim kiem theo destination
             sqlQuery.append(" and lower(o.destination) like lower(:destination) "); // :destination : tham so dong duoc gan sau bang setParameter
         }
-
+        if(StringUtils.hasLength(sortBy)){
+            Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
+            Matcher matcher = pattern.matcher(sortBy);
+            if(matcher.find()) {
+                sqlQuery.append(String.format("order by o.%s %s",matcher.group(1) ,matcher.group(3)));
+            }
+        }
         Query selectQuery = entityManager.createQuery(sqlQuery.toString());
         // pageNo : so trang bat dau tim
         // pageSize : moi trang chua toi da pageSize ban ghi
         selectQuery.setFirstResult(pageNo*pageSize); // tim bat dau tu dong pageNo*pageSize
         selectQuery.setMaxResults(pageSize);
         if(StringUtils.hasLength(search)){
+            //selectQuery.setParameter("destination", String.format("%%%s%%", search));
             selectQuery.setParameter("destination", "%"+search+"%");
         }
         List<Order> orders = (List<Order>) selectQuery.getResultList();
-        System.out.println(sqlQuery.toString());
         System.out.println("orders: " + orders);
-        return null;
+
+        // query ra so item
+        StringBuilder sqlCountQuery = new StringBuilder("select count(*) from Order o where 1=1 ");
+        if(StringUtils.hasLength(search)){
+            // tim kiem theo destination
+            sqlCountQuery.append(" and lower(o.destination) like lower(:destination) "); // :destination : tham so dong duoc gan sau bang setParameter
+        }
+        Query selectCountQuery = entityManager.createQuery(sqlCountQuery.toString());
+        if(StringUtils.hasLength(search)){
+            //selectQuery.setParameter("destination", String.format("%%%s%%", search));
+            selectCountQuery.setParameter("destination", "%"+search+"%");
+        }
+        Long totalElements = (Long) selectCountQuery.getSingleResult();
+        System.out.println("total elements: " + totalElements);
+        // tính total page
+        int totalPages = 0 ;
+        if(totalElements % pageSize == 0){
+            totalPages = (int) (totalElements/pageSize);
+        }else {
+            totalPages = (int) (totalElements/pageSize) + 1;
+        }
+        return PageResponse.builder()
+                .pageNo(pageNo)
+                .pageSize(pageSize)
+                .totalPages(totalPages)
+                .items(orders)
+                .build();
     }
 }

@@ -210,6 +210,31 @@
                 });
         }
     }
+
+    document.getElementById("bookingInput").addEventListener("keyup", function () {
+        fetchOrdersWithSearch();
+    });
+
+    function fetchOrdersWithSearch() {
+        let searchQuery = document.getElementById("bookingInput").value.trim();
+        if (searchQuery === "") {
+            fetchOrders(currentPage); // Gọi API lấy toàn bộ danh sách nếu ô tìm kiếm trống
+            return;
+        }
+        fetch(`/order/getAllOrderWithMultipleColumnsWithSearch?pageNo=${currentPage}&pageSize=${pageSize}&search=${searchQuery}&sortBy=totalPrice:asc`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 1000 && data.data.items.length > 0) {
+                    renderOrderTable(data.data.items);
+                    renderPagination(data.data.totalPages);
+                } else {
+                    alert("Không tìm thấy") ;
+                    console.error("No orders found or API returned error:", data.message);
+                }
+            })
+            .catch(error => console.error("Error fetching orders:", error));
+    }
+
 </script>
 </body>
 </html>
