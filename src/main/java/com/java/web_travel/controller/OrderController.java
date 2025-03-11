@@ -117,11 +117,25 @@ public class OrderController {
     @GetMapping("/getAllOrderWithMultipleColumnsWithSearch")
     public ApiReponse<PageResponse> getAllOrderWithSortByMultipleColumsAndSearch(@RequestParam(defaultValue = "0",required = false) int pageNo,
                                                                         @RequestParam(defaultValue = "5",required = false) int pageSize,
-                                                                        @RequestParam(defaultValue = "5", required = false) String search,
+                                                                        @RequestParam( required = false) String search,
                                                                         @RequestParam(required = false) String sortBy) {
         log.info("Start get order with sort by  columns and search : ");
         try{
             PageResponse<?> orders = orderService.getAllOrderWithSortByMultipleColumsAndSearch(pageNo,pageSize,search,sortBy)  ;
+            return new ApiReponse<>(1000,"get success",orders);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new ApiReponse<>(7777,e.getMessage(),null);
+        }
+    }
+    @GetMapping("/advance-search-by-criteria")
+    public ApiReponse<PageResponse> advanceSearchByCriteria(@RequestParam(defaultValue = "0",required = false) int pageNo,
+                                                                                 @RequestParam(defaultValue = "5",required = false) int pageSize,
+                                                                                 @RequestParam( required = false) String sortBy,
+                                                                                 @RequestParam(required = false) String... search) {
+        log.info("Start search by criteria : ");
+        try{
+            PageResponse<?> orders = orderService.advanceSearchByCriteria(pageNo,pageSize,sortBy,search)  ;
             return new ApiReponse<>(1000,"get success",orders);
         } catch (Exception e) {
             log.error(e.getMessage());

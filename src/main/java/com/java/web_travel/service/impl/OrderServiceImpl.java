@@ -201,4 +201,9 @@ public class OrderServiceImpl implements OrderService {
         return searchRepository.getAllOrderWithSortByMultipleColumsAndSearch(pageNo,pageSize,search,sortBy);
     }
 
+    @Override
+    public PageResponse advanceSearchByCriteria(int pageNo, int pageSize, String sortBy, String... search) {
+        return searchRepository.advanceSearchOrder(pageNo,pageSize,sortBy,search);
+    }
+
 }

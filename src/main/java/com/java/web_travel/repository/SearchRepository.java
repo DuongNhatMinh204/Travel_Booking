@@ -19,6 +19,7 @@ public class SearchRepository {
     @PersistenceContext
     private EntityManager entityManager; // inject vao de co the tuong tac voi co so du lieu
 
+    // tim kiem theo destination
     public  PageResponse getAllOrderWithSortByMultipleColumsAndSearch(int pageNo, int pageSize, String search, String sortBy){
         StringBuilder sqlQuery = new StringBuilder("select o from Order o where 1=1 ");
         if(StringUtils.hasLength(search)){
@@ -26,6 +27,7 @@ public class SearchRepository {
             sqlQuery.append(" and lower(o.destination) like lower(:destination) "); // :destination : tham so dong duoc gan sau bang setParameter
         }
         if(StringUtils.hasLength(sortBy)){
+            // totalPrice:desc
             Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
             Matcher matcher = pattern.matcher(sortBy);
             if(matcher.find()) {
@@ -70,5 +72,8 @@ public class SearchRepository {
                 .totalPages(totalPages)
                 .items(orders)
                 .build();
+    }
+    public PageResponse advanceSearchOrder(int pageNo, int pageSize, String sortBy, String... search){
+        return null ;
     }
 }
