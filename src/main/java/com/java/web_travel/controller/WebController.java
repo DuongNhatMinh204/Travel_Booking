@@ -69,4 +69,6 @@ public class WebController {
     public String adminFlightsPage() {return "admin_flights";}
     @GetMapping("/admin_hotel")
     public String adminHotelPage() {return "admin_hotel";}
+    @GetMapping("/profile")
+    public String profilePage() {return "profile";}
 }

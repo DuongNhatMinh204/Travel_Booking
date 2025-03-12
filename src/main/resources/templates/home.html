@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="/css/home.css">
+
 </head>
 <body>
 <header>
@@ -27,7 +28,15 @@
     </nav>
     <div class="icons">
         <a href="#"><i class="fas fa-search" id="search-btn"></i></a>
-        <a href="user"><i class="fas fa-user" id="login-btn"></i></a>
+<!--        <a href="user"><i class="fas fa-user" id="login-btn"></i></a>-->
+        <a href="#" id="user-icon">
+            <i class="fas fa-user"></i>
+        </a>
+        <div id="user-menu" class="dropdown-menu">
+            <a href="/profile">Xem Profile</a>
+            <a href="/user">Đăng xuất</a>
+        </div>
+
     </div>
 
 </header>
@@ -385,4 +394,21 @@
 </section>
 
 </body>
+<script>
+    document.getElementById("user-icon").addEventListener("click", function(event) {
+        event.preventDefault(); // Ngăn chặn chuyển trang
+        let menu = document.getElementById("user-menu");
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+    });
+
+    // Ẩn menu khi click ra ngoài
+    document.addEventListener("click", function(event) {
+        let userIcon = document.getElementById("user-icon");
+        let menu = document.getElementById("user-menu");
+
+        if (!userIcon.contains(event.target) && !menu.contains(event.target)) {
+            menu.style.display = "none";
+        }
+    });
+</script>
 </html>

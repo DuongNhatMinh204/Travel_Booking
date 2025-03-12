@@ -115,5 +115,10 @@ public class UserServiceImpl implements UserService {
         return searchRepository.findBySearch(pageNo,pageSize,search) ;
     }
 
+    @Override
+    public User findUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTS));
+    }
+
 
 }

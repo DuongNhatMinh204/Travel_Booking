@@ -87,4 +87,13 @@ public class UserController {
         log.info("User change status success");
         return apiReponse;
     }
+    @GetMapping("/{id}")
+    public ApiReponse<User> getUser(@PathVariable Long id) {
+        log.info("User getUser : " + id);
+        ApiReponse<User> apiReponse = new ApiReponse<>();
+        apiReponse.setData(userService.findUserById(id));
+        apiReponse.setMessage("get user success");
+        log.info("User get success");
+        return apiReponse;
+    }
 }

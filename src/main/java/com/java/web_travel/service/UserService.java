@@ -16,4 +16,5 @@ public interface UserService {
     public PageResponse getAllUsers(int pageNo, int pageSize);
     public User changeStatus(Long id);
     public PageResponse findUserBySearch(int pageNo,int pageSize,String search) ;
+    public User findUserById(Long id);
 }
