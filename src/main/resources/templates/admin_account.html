@@ -99,6 +99,7 @@
     <div class="search-box">
         <label for="search">Tìm kiếm:</label>
         <input type="text" id="search" name="search" placeholder="Nhập từ khóa...">
+        <button onclick="searchUsers()">Tìm</button>
     </div>
 </div>
 
@@ -236,6 +237,29 @@
                     console.error("Error toggling status:", error);
                 });
         }
+    }
+    function searchUsers() {
+        const searchKeyword = document.getElementById("search").value.trim();
+        currentPage = 0; // Reset về trang đầu tiên khi tìm kiếm
+
+        fetch(`/user/searchUser?pageNo=${currentPage}&pageSize=${pageSize}&search=${encodeURIComponent(searchKeyword)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.code === 1000) {
+                    renderUserTable(data.data.items);
+                    renderPagination(data.data.totalPages);
+                } else {
+                    console.error("Error fetching search results: ", data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error searching users:", error);
+            });
     }
 </script>
 </body>

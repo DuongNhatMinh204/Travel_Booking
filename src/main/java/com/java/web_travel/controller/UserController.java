@@ -64,6 +64,19 @@ public class UserController {
             return new ApiReponse<>(7777,e.getMessage(),null);
         }
     }
+    @GetMapping("/searchUser")
+    public ApiReponse<PageResponse> searchUser(@RequestParam(defaultValue = "0",required = false) int pageNo,
+                                               @RequestParam(defaultValue = "5",required = false) int pageSize,
+                                               @RequestParam(required = false) String search) {
+        log.info("User searchUser : " + search);
+        try {
+            PageResponse users = userService.findUserBySearch(pageNo,pageSize,search) ;
+            return new ApiReponse<>(1000,"get search user success",users);
+        } catch (Exception e) {
+            log.error("bug : "+e.getMessage());
+            return new ApiReponse<>(7777,e.getMessage(),null);
+        }
+    }
 
     @PatchMapping("/changeStatus/{id}")
     public ApiReponse<User> changeStatus(@PathVariable Long id) {

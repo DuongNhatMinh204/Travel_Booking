@@ -5,6 +5,7 @@ import com.java.web_travel.model.request.ChangePassDTO;
 import com.java.web_travel.model.request.UserCreateDTO;
 import com.java.web_travel.model.request.UserLoginDTO;
 import com.java.web_travel.model.response.PageResponse;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -14,4 +15,5 @@ public interface UserService {
     public void changePassword(ChangePassDTO changePassDto);
     public PageResponse getAllUsers(int pageNo, int pageSize);
     public User changeStatus(Long id);
+    public PageResponse findUserBySearch(int pageNo,int pageSize,String search) ;
 }

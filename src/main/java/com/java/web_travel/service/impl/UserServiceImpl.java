@@ -10,6 +10,7 @@ import com.java.web_travel.model.request.UserCreateDTO;
 import com.java.web_travel.model.request.UserLoginDTO;
 import com.java.web_travel.model.response.PageResponse;
 import com.java.web_travel.repository.RoleRepository;
+import com.java.web_travel.repository.SearchRepository;
 import com.java.web_travel.repository.UserRepository;
 import com.java.web_travel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private SearchRepository searchRepository;
+
     @Override
     public User createUser(UserCreateDTO userCreateDTO) {
         // CHECK MATCH PASSWORD
@@ -104,6 +108,11 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTS));
         user.setStatus(!user.isStatus());
         return userRepository.save(user);
+    }
+
+    @Override
+    public PageResponse findUserBySearch(int pageNo, int pageSize, String search) {
+        return searchRepository.findBySearch(pageNo,pageSize,search) ;
     }
 
 
