@@ -19,4 +19,5 @@ public interface OrderService {
     public PageResponse getAllOrdersByMultipleColumns(int pageNo, int pageSize,String... sorts); // String... == List<String>
     public PageResponse getAllOrderWithSortByMultipleColumsAndSearch(int pageNo, int pageSize,String search,String sortBy);
     public PageResponse advanceSearchByCriteria(int pageNo, int pageSize,String sortBy,String... search);
+    public Order payOrderById(Long orderId);
 }

@@ -1,10 +1,8 @@
 package com.java.web_travel.service.impl;
 
-import com.java.web_travel.entity.Flight;
-import com.java.web_travel.entity.Hotel;
-import com.java.web_travel.entity.Order;
-import com.java.web_travel.entity.User;
+import com.java.web_travel.entity.*;
 import com.java.web_travel.enums.ErrorCode;
+import com.java.web_travel.enums.PaymentStatus;
 import com.java.web_travel.exception.AppException;
 import com.java.web_travel.model.request.OrderDTO;
 import com.java.web_travel.model.request.OrderHotelDTO;
@@ -104,7 +102,10 @@ public class OrderServiceImpl implements OrderService {
         order.setFlight(flight);
         // tính tiền
         order.setTotalPrice(order.getTotalPrice()+order.getNumberOfPeople()*flight.getPrice());
-
+        //xác nhận tình trạng thanh toán
+        Payment  payment = new Payment();
+        payment.setStatus(PaymentStatus.UNPAID);
+        order.setPayment(payment);
         orderRepository.save(order);
         return order ;
     }
@@ -206,4 +207,13 @@ public class OrderServiceImpl implements OrderService {
         return searchRepository.advanceSearchOrder(pageNo,pageSize,sortBy,search);
     }
 
+    @Override
+    public Order payOrderById(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(()->new AppException(ErrorCode.ORDER_NOT_FOUND));
+        Payment payment = new Payment();
+        payment.setStatus(PaymentStatus.PAID);
+        order.setPayment(payment);
+        orderRepository.save(order);
+        return order ;
+    }
 }

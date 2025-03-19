@@ -142,4 +142,11 @@ public class OrderController {
             return new ApiReponse<>(7777,e.getMessage(),null);
         }
     }
+    @PostMapping("/pay/{tripId}")
+    public  ApiReponse<Order> payOrder(@PathVariable Long tripId){
+        ApiReponse apiReponse = new ApiReponse<>();
+        apiReponse.setData(orderService.payOrderById(tripId));
+        apiReponse.setMessage("pay success");
+        return apiReponse;
+    }
 }
