@@ -7,6 +7,37 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="/css/news.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .user-icon {
+            font-size: 24px;
+            cursor: pointer;
+            position: relative;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            width: 150px;
+            z-index: 1000;
+        }
+        .dropdown-menu a {
+            display: block;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+        }
+        .dropdown-menu a:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -26,10 +57,34 @@
         <a href="plan-trip">Pay</a>
     </nav>
     <div class="icons">
-        <a href=""><i class="fas fa-search" id="search-btn"></i></a>
-        <a href="user"><i class="fas fa-user" id="login-btn"></i></a>
+        <a href="#"><i class="fas fa-search" id="search-btn"></i></a>
+        <!--        <a href="user"><i class="fas fa-user" id="login-btn"></i></a>-->
+        <a href="#" id="user-icon">
+            <i class="fas fa-user"></i>
+        </a>
+        <div id="user-menu" class="dropdown-menu">
+            <a href="/profile">Xem Profile</a>
+            <a href="/user">Đăng xuất</a>
+        </div>
     </div>
 </header>
+<script>
+    document.getElementById("user-icon").addEventListener("click", function(event) {
+        event.preventDefault(); // Ngăn chặn chuyển trang
+        let menu = document.getElementById("user-menu");
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+    });
+
+    // Ẩn menu khi click ra ngoài
+    document.addEventListener("click", function(event) {
+        let userIcon = document.getElementById("user-icon");
+        let menu = document.getElementById("user-menu");
+
+        if (!userIcon.contains(event.target) && !menu.contains(event.target)) {
+            menu.style.display = "none";
+        }
+    });
+</script>
 <h1 class="heading">
     <span>n</span>
     <span>e</span>

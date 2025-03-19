@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class WebController {
+    @GetMapping("/login")
+    public String login() {return "user";}
     @GetMapping("/user")
     public String userPage() {
         return "user";
