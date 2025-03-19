@@ -8,6 +8,7 @@ import com.java.web_travel.exception.AppException;
 import com.java.web_travel.model.request.ChangePassDTO;
 import com.java.web_travel.model.request.UserCreateDTO;
 import com.java.web_travel.model.request.UserLoginDTO;
+import com.java.web_travel.model.request.UserUpdateRequest;
 import com.java.web_travel.model.response.PageResponse;
 import com.java.web_travel.repository.RoleRepository;
 import com.java.web_travel.repository.SearchRepository;
@@ -120,5 +121,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTS));
     }
 
-
+    @Override
+    public User updateUser(Long id, UserUpdateRequest userUpdateRequest) {
+        User user = userRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTS));
+        user.setFullName(userUpdateRequest.getFullName());
+        user.setEmail(userUpdateRequest.getEmail());
+        user.setPhone(userUpdateRequest.getPhone());
+        user.setBirthday(userUpdateRequest.getBirthday());
+        return userRepository.save(user);
+    }
 }

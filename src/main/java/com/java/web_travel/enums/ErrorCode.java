@@ -23,6 +23,8 @@ public enum ErrorCode {
     DATE_INVALID(1015,"ngày check-in khách sạn phải sau ngày đi", HttpStatus.BAD_REQUEST),
     NUMBER_CHAIR_NOT_VALID(1016,"Không thể thay đổi số ghế ít hơn số ghế đã được đặt", HttpStatus.BAD_REQUEST),
     PRICE_NOT_VALID(1017,"price not valid", HttpStatus.BAD_REQUEST),
+    LENGTH_PASS_NOT_VALID(1018,"The length password must be greater than or equal to 6 characters", HttpStatus.BAD_REQUEST),
+    LENGTH_PHONE_NOT_VALID(1018,"The length phone must be greater than or equal to 10 characters", HttpStatus.BAD_REQUEST)
     ;
     private int code ;
     private String message;

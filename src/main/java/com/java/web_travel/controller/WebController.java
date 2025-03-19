@@ -73,4 +73,6 @@ public class WebController {
     public String adminHotelPage() {return "admin_hotel";}
     @GetMapping("/profile")
     public String profilePage() {return "profile";}
+    @GetMapping("/newPass")
+    public String newPassPage() {return "changePassWord";}
 }

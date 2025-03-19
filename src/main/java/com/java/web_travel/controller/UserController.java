@@ -4,6 +4,7 @@ import com.java.web_travel.entity.User;
 import com.java.web_travel.model.request.ChangePassDTO;
 import com.java.web_travel.model.request.UserCreateDTO;
 import com.java.web_travel.model.request.UserLoginDTO;
+import com.java.web_travel.model.request.UserUpdateRequest;
 import com.java.web_travel.model.response.ApiReponse;
 import com.java.web_travel.model.response.PageResponse;
 import com.java.web_travel.service.UserService;
@@ -94,6 +95,15 @@ public class UserController {
         apiReponse.setData(userService.findUserById(id));
         apiReponse.setMessage("get user success");
         log.info("User get success");
+        return apiReponse;
+    }
+    @PutMapping("/update/{id}")
+    public ApiReponse<User> updateUser(@PathVariable Long id,@Valid @RequestBody UserUpdateRequest user) {
+        log.info("User update : " + user);
+        ApiReponse<User> apiReponse = new ApiReponse<>();
+        apiReponse.setData(userService.updateUser(id,user));
+        apiReponse.setMessage("update user success");
+        log.info("User update success");
         return apiReponse;
     }
 }

@@ -106,11 +106,13 @@
         <h2>Thông tin Người Dùng</h2>
         <div id="user-info">
             <table border="1">
-                <tr><th>Số điện thoại</th><td id="user-phone"></td></tr>
-                <tr><th>Họ và tên</th><td id="user-fullname"></td></tr>
-                <tr><th>Email</th><td id="user-email"></td></tr>
-                <tr><th>Ngày sinh</th><td id="user-birthday"></td></tr>
+                <tr><th>Số điện thoại</th><td><input type="text" id="user-phone" value=""></td></tr>
+                <tr><th>Họ và tên</th><td><input type="text" id="user-fullname" value=""></td></tr>
+                <tr><th>Email</th><td><input type="text" id="user-email" value=""></td></tr>
+                <tr><th>Ngày sinh</th><td><input type="text" id="user-birthday" value=""></td></tr>
             </table>
+            <button id="update-btn">Cập nhật</button>
+            <a href="newPass"><button>Thay đổi mật khẩu</button></a>
         </div>
     </section>
 </section>
@@ -142,18 +144,45 @@
             .then(apiResponse => {
                 if (apiResponse.code === 1000) {
                     let user = apiResponse.data;
-                    document.getElementById("user-phone").innerText = user.phone;
-                    document.getElementById("user-fullname").innerText = user.fullName;
-                    document.getElementById("user-email").innerText = user.email;
-                    document.getElementById("user-birthday").innerText = user.birthday;
+                    document.getElementById("user-phone").value = user.phone;
+                    document.getElementById("user-fullname").value = user.fullName;
+                    document.getElementById("user-email").value = user.email;
+                    document.getElementById("user-birthday").value = user.birthday;
                 } else {
                     alert("Không thể lấy thông tin user.");
                 }
             })
             .catch(error => console.error("Lỗi khi gọi API:", error));
-    })
 
+        // Xử lý sự kiện khi nhấn nút "Cập nhật"
+        document.getElementById("update-btn").addEventListener("click", function () {
+            let updatedUser = {
+                phone: document.getElementById("user-phone").value,
+                fullName: document.getElementById("user-fullname").value,
+                email: document.getElementById("user-email").value,
+                birthday: document.getElementById("user-birthday").value
+            };
 
+            // Gửi yêu cầu cập nhật thông tin người dùng
+            fetch(`/user/update/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedUser)
+            })
+                .then(response => response.json())
+                .then(apiResponse => {
+                    if (apiResponse.code === 1000) {
+                        alert("Cập nhật thông tin thành công!");
+                        // Có thể làm mới trang hoặc thực hiện các hành động khác sau khi cập nhật thành công
+                    } else {
+                        alert("Cập nhật thông tin thất bại.");
+                    }
+                })
+                .catch(error => console.error("Lỗi khi cập nhật thông tin:", error));
+        });
+    });
 </script>
 </body>
 </html>
