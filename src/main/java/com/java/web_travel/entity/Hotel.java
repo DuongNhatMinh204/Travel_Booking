@@ -25,18 +25,24 @@ public class Hotel {
     private String hotelName;
 
     @Column(name = "hotel_price")
-    private double hotelPrice;
+    private double hotelPriceFrom;
+
+    @Column(name = "address")
+    private String address ;
+
+    @Column(name = "number_floor")
+    private int numberFloor;
+
+    @OneToMany(mappedBy = "hotel" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    private List<HotelBedroom> hotelBedrooms;
 
     @OneToMany(mappedBy = "hotel",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Order> orders;
 
-
-//    public Hotel() {}
-
     public Hotel(String hotelName, double hotelPrice) {
         this.hotelName = hotelName;
-        this.hotelPrice = hotelPrice;
+        this.hotelPriceFrom = hotelPrice;
     }
 
 }

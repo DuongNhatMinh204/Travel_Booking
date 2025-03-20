@@ -1,5 +1,6 @@
 package com.java.web_travel.service.impl;
 
+import com.java.web_travel.convert.HotelConverter;
 import com.java.web_travel.entity.Hotel;
 import com.java.web_travel.enums.ErrorCode;
 import com.java.web_travel.exception.AppException;
@@ -16,14 +17,15 @@ public class    HotelServiceImpl implements HotelService {
     @Autowired
     private HotelRepository hotelRepository;
 
+    @Autowired
+    private HotelConverter hotelConverter;
+
     @Override
     public Hotel createHotel(HotelDTO hotelDTO) {
-        Hotel hotel = new Hotel();
-        if(hotelDTO.getPrice() <0){
+        Hotel hotel = hotelConverter.convertHotel(hotelDTO);
+        if(hotelDTO.getPriceFrom() <0){
             throw  new AppException(ErrorCode.PRICE_NOT_VALID);
         }
-        hotel.setHotelName(hotelDTO.getHotelName());
-        hotel.setHotelPrice(hotelDTO.getPrice());
         return hotelRepository.save(hotel);
     }
 
@@ -42,12 +44,21 @@ public class    HotelServiceImpl implements HotelService {
 
     @Override
     public Hotel updateHotel(HotelDTO hotelDTO , Long hotelId){
-        if(hotelDTO.getPrice() <0){
+        if(hotelDTO.getPriceFrom() <0){
             throw  new AppException(ErrorCode.PRICE_NOT_VALID);
         }
         Hotel hotel = hotelRepository.findById(hotelId).orElseThrow(() -> new AppException(ErrorCode.HOTEL_NOT_FOUND));
         hotel.setHotelName(hotelDTO.getHotelName());
-        hotel.setHotelPrice(hotelDTO.getPrice());
+        hotel.setHotelPriceFrom(hotelDTO.getPriceFrom());
+        hotel.setAddress(hotelDTO.getAddress());
         return hotelRepository.save(hotel);
+    }
+
+    @Override
+    public void deleteHotel(Long hotelId) {
+        Hotel hotel = hotelRepository.findById(hotelId)
+                .orElseThrow(() -> new AppException(ErrorCode.HOTEL_NOT_FOUND));
+
+        hotelRepository.deleteById(hotelId);
     }
 }

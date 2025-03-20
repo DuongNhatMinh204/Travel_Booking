@@ -3,6 +3,7 @@ package com.java.web_travel.service.impl;
 import com.java.web_travel.entity.*;
 import com.java.web_travel.enums.ErrorCode;
 import com.java.web_travel.enums.PaymentStatus;
+import com.java.web_travel.enums.RoomStatus;
 import com.java.web_travel.exception.AppException;
 import com.java.web_travel.model.request.OrderDTO;
 import com.java.web_travel.model.request.OrderHotelDTO;
@@ -76,8 +77,20 @@ public class OrderServiceImpl implements OrderService {
         order.setHotel(hotel);
         order.setStartHotel(orderHotelDTO.getStartHotel());
         order.setEndHotel(orderHotelDTO.getEndHotel());
+
+        String listBedrooms = "" ;
+        double totalPrice = 0 ;
+        for(HotelBedroom hotelBedroom : orderHotelDTO.getHotelBedroomList()){
+            if(hotelBedroom.getRoomStatus().equals("UNAVAILABLE")){
+                throw new AppException(ErrorCode.HOTEL_BEDROOM_NOT_AVAILABLE) ;
+            }
+            listBedrooms += String.valueOf(hotelBedroom.getRoomNumber()) + " " ;
+            totalPrice += hotelBedroom.getPrice() ;
+            hotelBedroom.setRoomStatus(RoomStatus.UNAVAILABLE);
+        }
+        order.setListBedrooms(listBedrooms);
         // tính tiền
-        order.setTotalPrice(order.getTotalPrice()+order.getNumberOfPeople()*hotel.getHotelPrice());
+        order.setTotalPrice(order.getTotalPrice()+totalPrice);
         return orderRepository.save(order);
     }
 
