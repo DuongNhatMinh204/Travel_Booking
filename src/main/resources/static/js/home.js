@@ -2,18 +2,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoSlider = document.getElementById('video-slider');
     const controlButtons = document.querySelectorAll('.vid-btn');
 
+    if (!videoSlider) return; // Đảm bảo videoSlider tồn tại
+
     controlButtons.forEach(button => {
         button.addEventListener('click', () => {
-            // Remove active class from all buttons
-            controlButtons.forEach(btn => btn.classList.remove('active'));
-            // Add active class to the clicked button
+            // Loại bỏ class "active" khỏi tất cả nút
+            document.querySelector('.vid-btn.active')?.classList.remove('active');
+
+            // Thêm class "active" vào nút hiện tại
             button.classList.add('active');
-            // Change video source
-            const newSrc = button.getAttribute('data-src');
-            videoSlider.src = newSrc;
-            // Load and play the new video
+
+            // Thay đổi nguồn video
+            videoSlider.src = button.dataset.src;
             videoSlider.load();
-            videoSlider.play();
+
+            // Đợi video tải xong rồi mới phát
+            videoSlider.oncanplay = () => videoSlider.play();
         });
     });
 });
