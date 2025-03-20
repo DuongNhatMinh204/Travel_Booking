@@ -541,13 +541,3 @@ section{
     justify-content: center; /* Căn giữa */
     gap: 20px; /* Tạo khoảng cách giữa các thẻ tin */
 }
-.tin {
-    width: calc(33.333% - 20px); /* Chia làm 3 cột */
-    max-width: 400px; /* Không quá lớn */
-    min-width: 250px; /* Không quá nhỏ */
-}
-.news-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-}
