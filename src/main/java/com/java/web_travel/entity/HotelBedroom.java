@@ -22,10 +22,6 @@ public class HotelBedroom {
     @Column(name = "price")
     private Double price;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "room_status")
-    private RoomStatus roomStatus;
-
     @Column(name = "room_type")
     private String roomType ;
 

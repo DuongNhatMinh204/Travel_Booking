@@ -32,7 +32,6 @@ public class HotelConverter {
                     hotelBedroom.setPrice(hotelDto.getPriceFrom());
                     hotelBedroom.setRoomType("Normal Room");
                 }
-                hotelBedroom.setRoomStatus(RoomStatus.AVAILABLE);
                 hotelBedroom.setHotel(hotel);
 
                 hotelBedroomList.add(hotelBedroom);

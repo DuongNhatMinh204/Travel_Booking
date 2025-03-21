@@ -2,13 +2,16 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchHotels();
 });
 
-// Lấy danh sách khách sạn từ API
+let hotelData = [];
+let selectedRooms = []; // Lưu danh sách phòng đã chọn
+
 function fetchHotels() {
-    fetch("http://localhost:8080/admin/getAllHotels")
+    fetch("/admin/getAllHotels")
         .then(response => response.json())
         .then(result => {
             if (result.code === 1000 && result.data.length > 0) {
-                renderHotels(result.data);
+                hotelData = result.data;
+                renderHotels(hotelData);
             } else {
                 showError("Không có khách sạn nào!");
             }
@@ -19,15 +22,13 @@ function fetchHotels() {
         });
 }
 
-// Hiển thị danh sách khách sạn lên trang
 function renderHotels(hotels) {
     const hotelList = document.getElementById("hotel-list");
-    hotelList.innerHTML = ""; // Xóa nội dung cũ
+    hotelList.innerHTML = "";
 
     hotels.forEach(hotel => {
         const hotelItem = document.createElement("div");
         hotelItem.classList.add("hotel-item");
-
         hotelItem.innerHTML = `
             <div class="hotel-name">${hotel.hotelName}</div>
             <div class="hotel-price">Giá từ: ${hotel.hotelPriceFrom.toLocaleString()} VND</div>
@@ -35,11 +36,9 @@ function renderHotels(hotels) {
             <div class="hotel-floors">Số tầng: ${hotel.numberFloor}</div>
             <button class="choose-hotel" data-hotel-id="${hotel.id}">Chọn khách sạn</button>
         `;
-
         hotelList.appendChild(hotelItem);
     });
 
-    // Thêm sự kiện cho nút chọn khách sạn
     document.querySelectorAll(".choose-hotel").forEach(button => {
         button.addEventListener("click", function () {
             const hotelId = this.getAttribute("data-hotel-id");
@@ -48,89 +47,97 @@ function renderHotels(hotels) {
     });
 }
 
-// Hiển thị lỗi nếu API lỗi hoặc không có khách sạn
 function showError(message) {
-    const hotelList = document.getElementById("hotel-list");
-    hotelList.innerHTML = `<p class="error-message">${message}</p>`;
+    document.getElementById("hotel-list").innerHTML = `<p class="error-message">${message}</p>`;
 }
 
-// Mở modal khi chọn khách sạn
 function openHotelModal(hotelId) {
     document.getElementById("hotel-id").value = hotelId;
     document.getElementById("hotel-modal").style.display = "flex";
+    const roomList = document.getElementById("room-list");
+    roomList.style.display = "none";
 
-    // Lấy danh sách phòng của khách sạn
-    fetch(`http://localhost:8080/admin/getAllHotels`)
-        .then(response => response.json())
-        .then(result => {
-            if (result.code === 1000 && result.data.length > 0) {
-                const hotel = result.data.find(h => h.id == hotelId);
-                if (hotel) {
-                    renderRoomList(hotel.hotelBedrooms);
-                }
+    const chooseRoomBtn = document.getElementById("choose-room-btn");
+    chooseRoomBtn.addEventListener("click", function () {
+        const hotel = hotelData.find(h => h.id == hotelId);
+        if (hotel && hotel.hotelBedrooms.length > 0) {
+            if (roomList.style.display === "none") {
+                renderRoomList(hotel.hotelBedrooms);
+                roomList.style.display = "block";
+                chooseRoomBtn.textContent = "Ẩn danh sách phòng";
+            } else {
+                roomList.style.display = "none";
+                chooseRoomBtn.textContent = "Chọn phòng";
             }
-        })
-        .catch(error => {
-            console.error("Lỗi khi tải danh sách phòng:", error);
-        });
+        } else {
+            roomList.innerHTML = "<p class='error-message'>Không có phòng nào!</p>";
+        }
+    });
 }
 
-// Hiển thị danh sách phòng trong modal
 function renderRoomList(rooms) {
     const roomList = document.getElementById("room-list");
-    roomList.innerHTML = ""; // Xóa nội dung cũ
+    roomList.innerHTML = "";
 
     rooms.forEach(room => {
         const roomItem = document.createElement("div");
         roomItem.classList.add("room-item");
 
-        roomItem.innerHTML = `
-            <input type="checkbox" id="room-${room.id}" value="${room.id}">
-            <label for="room-${room.id}">Phòng ${room.roomNumber} - ${room.roomType} (${room.price.toLocaleString()} VND)</label>
-        `;
+        const isChecked = selectedRooms.some(selected => selected.id === room.id) ? "checked" : "";
 
+        roomItem.innerHTML = `
+            <input type="checkbox" id="room-${room.id}" value="${room.id}" ${isChecked}>
+            <label for="room-${room.id}">
+                Phòng ${room.roomNumber} - ${room.roomType} (${room.price.toLocaleString()} VND)
+            </label>
+        `;
         roomList.appendChild(roomItem);
     });
 
-    // Hiển thị danh sách phòng khi di chuột vào nút "Chọn phòng"
-    document.getElementById("choose-room-btn").addEventListener("click", function () {
-        roomList.classList.toggle("show");
+    document.querySelectorAll("#room-list input[type='checkbox']").forEach(checkbox => {
+        checkbox.addEventListener("change", function () {
+            const roomId = parseInt(this.value);
+            const room = rooms.find(r => r.id === roomId);
+
+            if (this.checked) {
+                selectedRooms.push({
+                    id: room.id,
+                    roomNumber: room.roomNumber,
+                    price: room.price,
+                    roomType: room.roomType
+                });
+            } else {
+                selectedRooms = selectedRooms.filter(r => r.id !== roomId);
+            }
+        });
     });
 }
 
-// Gửi API chọn khách sạn và phòng
+// Xử lý gửi form chọn khách sạn và phòng
+
 document.getElementById("hotel-form").addEventListener("submit", function (event) {
     event.preventDefault();
-    // Lấy orderId từ URL
     const urlParams = new URLSearchParams(window.location.search);
     const orderId = urlParams.get("orderId");
-
     if (!orderId) {
         alert("Không tìm thấy orderId. Vui lòng đặt tour trước!");
         return;
     }
-
     const hotelId = document.getElementById("hotel-id").value;
     const checkinDate = document.getElementById("checkin-date").value;
     const checkoutDate = document.getElementById("checkout-date").value;
-
-    // Lấy danh sách phòng đã chọn
-    const selectedRooms = Array.from(document.querySelectorAll("#room-list input[type='checkbox']:checked"))
-        .map(checkbox => ({
-            id: parseInt(checkbox.value),
-            roomNumber: checkbox.nextElementSibling.textContent.split(" ")[1],
-            price: parseFloat(checkbox.nextElementSibling.textContent.match(/\d+/g)[1]),
-            roomStatus: "AVAILABLE",
-            roomType: checkbox.nextElementSibling.textContent.split(" - ")[1].split(" (")[0]
-        }));
-
     if (!hotelId || !checkinDate || !checkoutDate || selectedRooms.length === 0) {
         alert("Vui lòng nhập đầy đủ thông tin và chọn ít nhất một phòng!");
         return;
     }
 
-    // Gửi yêu cầu API
-    fetch(`http://localhost:8080/order/chooseHotel/${orderId}/${hotelId}`, {
+    console.log("Dữ liệu gửi đi:", {
+        startHotel: checkinDate,
+        endHotel: checkoutDate,
+        hotelBedroomList: selectedRooms
+    });
+
+    fetch(`/order/chooseHotel/${orderId}/${hotelId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -155,7 +162,6 @@ document.getElementById("hotel-form").addEventListener("submit", function (event
         });
 });
 
-// Đóng modal khi nhấn dấu "X"
 document.querySelector(".close-modal").addEventListener("click", function () {
     document.getElementById("hotel-modal").style.display = "none";
 });

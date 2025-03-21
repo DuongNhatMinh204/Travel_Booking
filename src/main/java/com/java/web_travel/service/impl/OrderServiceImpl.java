@@ -36,6 +36,10 @@ public class OrderServiceImpl implements OrderService {
     private FlightRepository flightRepository;
     @Autowired
     private SearchRepository searchRepository;
+    @Autowired
+    private HotelBedroomRepository hotelBedroomRepository;
+    @Autowired
+    private HotelBookingRepository hotelBookingRepository;
     @Override
     public Order addOrder(OrderDTO orderDTO, Long userId) {
         Order order = new Order();
@@ -81,12 +85,22 @@ public class OrderServiceImpl implements OrderService {
         String listBedrooms = "" ;
         double totalPrice = 0 ;
         for(HotelBedroom hotelBedroom : orderHotelDTO.getHotelBedroomList()){
-            if(hotelBedroom.getRoomStatus().equals("UNAVAILABLE")){
+            // kiem tra co bi chong cheo lich khong
+            List<HotelBooking> hotelBookings = hotelBookingRepository.findOverLappingBookings(hotelId ,hotelBedroom.getId(),orderHotelDTO.getStartHotel(),orderHotelDTO.getEndHotel());
+            if(!hotelBookings.isEmpty()){
                 throw new AppException(ErrorCode.HOTEL_BEDROOM_NOT_AVAILABLE) ;
             }
-            listBedrooms += String.valueOf(hotelBedroom.getRoomNumber()) + " " ;
-            totalPrice += hotelBedroom.getPrice() ;
-            hotelBedroom.setRoomStatus(RoomStatus.UNAVAILABLE);
+            HotelBooking  hotelBooking = new HotelBooking();
+            hotelBooking.setHotel(hotel);
+            hotelBooking.setHotelBedroom(hotelBedroom);
+            hotelBooking.setOrder(order);
+            hotelBooking.setStartDate(orderHotelDTO.getStartHotel());
+            hotelBooking.setEndDate(orderHotelDTO.getEndHotel());
+
+            // save data
+            hotelBookingRepository.save(hotelBooking);
+            listBedrooms += hotelBedroom.getRoomNumber() + " " ;
+            totalPrice += hotelBedroom.getPrice();
         }
         order.setListBedrooms(listBedrooms);
         // tính tiền
@@ -127,6 +141,10 @@ public class OrderServiceImpl implements OrderService {
     public void cancelOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(()->new AppException(ErrorCode.ORDER_NOT_FOUND));
+        hotelBookingRepository.deleteByOrderId(orderId);
+        Flight flight = order.getFlight();
+        flight.setSeatAvailable(flight.getNumberOfChairs()+order.getNumberOfPeople());
+        flightRepository.save(flight);
         orderRepository.delete(order);
         return ;
     }
