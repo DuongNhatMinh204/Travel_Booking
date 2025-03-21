@@ -27,6 +27,7 @@ public enum ErrorCode {
     LENGTH_PHONE_NOT_VALID(1018,"The length phone must be greater than or equal to 10 characters", HttpStatus.BAD_REQUEST),
     NUMBER_FLOOR_NOT_VALID(1019,"number floor not valid", HttpStatus.BAD_REQUEST),
     HOTEL_BEDROOM_NOT_AVAILABLE(1020,"Phòng đã có người đặt trước . Vui lòng đặt phòng khác ! ", HttpStatus.BAD_REQUEST),
+    NOT_CHANGE_STATUS_ADMIN(1021,"Không thể thay đổi trạng thái của admin", HttpStatus.BAD_REQUEST),
     ;
     private int code ;
     private String message;
