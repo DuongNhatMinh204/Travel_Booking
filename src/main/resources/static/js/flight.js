@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const orderId = urlParams.get("orderId");
-
-    if (!orderId) {
-        showError("Không tìm thấy orderId. Vui lòng đặt tour trước!");
-        return;
-    }
+    //
+    // if (!orderId) {
+    //     showError("Không tìm thấy orderId. Vui lòng đặt tour trước!");
+    //     return;
+    // }
 
     // Hiển thị loading
     const flightList = document.getElementById("flight-list");
@@ -63,6 +63,11 @@ function renderFlights(flights, orderId) {
 }
 
 function chooseFlight(orderId, flightId) {
+
+    if (!orderId) {
+        showError("Không tìm thấy orderId. Vui lòng đặt tour trước!");
+        return;
+    }
     fetch(`/order/chooseFlight/${orderId}/${flightId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" }

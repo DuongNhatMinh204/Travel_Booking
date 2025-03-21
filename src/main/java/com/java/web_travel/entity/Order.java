@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -70,6 +71,8 @@ public class Order {
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 
+    @Column(name = "bedrooms")
+    private String listBedrooms;
 
     public Order(String destination, int numberOfPeople, Date checkinDate, Date checkoutDate) {
         this.destination = destination;

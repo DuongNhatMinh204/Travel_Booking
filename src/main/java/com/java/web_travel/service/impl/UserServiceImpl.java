@@ -107,6 +107,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User changeStatus(Long id) {
         User user = userRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTS));
+        if(user.getRole().getRoleCode().equals(RoleCode.ADMIN)){
+            throw new AppException(ErrorCode.NOT_CHANGE_STATUS_ADMIN) ;
+        }
         user.setStatus(!user.isStatus());
         return userRepository.save(user);
     }
@@ -128,6 +131,27 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userUpdateRequest.getEmail());
         user.setPhone(userUpdateRequest.getPhone());
         user.setBirthday(userUpdateRequest.getBirthday());
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User createAdmin(UserCreateDTO userCreateDTO) {
+        // CHECK MATCH PASSWORD
+        if(!userCreateDTO.getPassword().equals(userCreateDTO.getPasswordConfirm())){
+            throw new AppException(ErrorCode.PASSWORD_MISMATCH) ;
+        }
+        // check exist phone
+        if(userRepository.existsByPhone(userCreateDTO.getPhone())) {
+            throw new AppException(ErrorCode.USER_EXISTS) ;
+        }
+        User user = new User();
+        user.setPhone(userCreateDTO.getPhone());
+        user.setPassword(userCreateDTO.getPassword());
+        user.setFullName(userCreateDTO.getFullName());
+        user.setEmail(userCreateDTO.getEmail());
+        user.setBirthday(userCreateDTO.getBirthday());
+        user.setStatus(true);
+        user.setRole(roleRepository.findByRoleCode(RoleCode.ADMIN).orElseThrow(()-> new AppException(ErrorCode.ROLE_NOT_FOUND)));
         return userRepository.save(user);
     }
 }

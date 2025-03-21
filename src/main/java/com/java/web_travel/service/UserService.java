@@ -19,4 +19,5 @@ public interface UserService {
     public PageResponse findUserBySearch(int pageNo,int pageSize,String search) ;
     public User findUserById(Long id);
     public User updateUser(Long id, UserUpdateRequest userUpdateRequest);
+    public User createAdmin(UserCreateDTO userCreateDTO);
 }

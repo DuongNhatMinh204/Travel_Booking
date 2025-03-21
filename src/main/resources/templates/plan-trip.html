@@ -202,6 +202,7 @@
       <th>Check-in Time</th>
       <th>Check-out Time</th>
       <th>Khách Sạn</th>
+      <th>Phòng</th>
       <th>Ngày Bay</th>
       <th>Tổng Tiền</th>
       <th>Tình Trạng Thanh Toán</th>
@@ -289,6 +290,7 @@
         <td>${new Date(order.checkinDate).toLocaleDateString()}</td>
         <td>${new Date(order.checkoutDate).toLocaleDateString()}</td>
         <td>${order.hotel ? order.hotel.hotelName : 'N/A'}</td>
+        <td>${order.hotel && order.listBedrooms ? order.listBedrooms : 'N/A'}</td>
         <td>${order.flight ? new Date(order.flight.checkInDate).toLocaleDateString() : 'N/A'}</td>
         <td>${order.totalPrice}</td>
         <td>${order.payment && order.payment.status === 'PAID' ? 'Đã thanh toán' : 'Chưa thanh toán'}</td>

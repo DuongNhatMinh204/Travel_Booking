@@ -1,101 +1,167 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const orderId = urlParams.get("orderId");
-
-    if (!orderId) {
-        showError("Không tìm thấy orderId. Vui lòng đặt tour trước!");
-        return;
-    }
-
-    fetchHotels(orderId);
+    fetchHotels();
 });
 
-//  Lấy danh sách khách sạn từ API
-function fetchHotels(orderId) {
+let hotelData = [];
+let selectedRooms = []; // Lưu danh sách phòng đã chọn
+
+function fetchHotels() {
     fetch("/admin/getAllHotels")
         .then(response => response.json())
         .then(result => {
-            if (result.code === 1000 && result.data) {
-                renderHotels(result.data, orderId);
+            if (result.code === 1000 && result.data.length > 0) {
+                hotelData = result.data;
+                renderHotels(hotelData);
             } else {
-                showError("Lỗi tải danh sách khách sạn!");
+                showError("Không có khách sạn nào!");
             }
         })
-        .catch(() => showError("Không thể tải danh sách khách sạn!"));
+        .catch(error => {
+            console.error("Lỗi khi tải danh sách khách sạn:", error);
+            showError("Không thể tải danh sách khách sạn!");
+        });
 }
 
-// Hiển thị danh sách khách sạn lên trang
-function renderHotels(hotels, orderId) {
+function renderHotels(hotels) {
     const hotelList = document.getElementById("hotel-list");
     hotelList.innerHTML = "";
-
-    if (hotels.length === 0) {
-        showError("Không có khách sạn nào!");
-        return;
-    }
 
     hotels.forEach(hotel => {
         const hotelItem = document.createElement("div");
         hotelItem.classList.add("hotel-item");
-
         hotelItem.innerHTML = `
             <div class="hotel-name">${hotel.hotelName}</div>
-            <div class="hotel-price">${hotel.hotelPrice.toLocaleString()} VND</div>
-            <button class="choose-hotel" data-hotel-id="${hotel.id}" data-order-id="${orderId}">Chọn khách sạn</button>
+            <div class="hotel-price">Giá từ: ${hotel.hotelPriceFrom.toLocaleString()} VND</div>
+            <div class="hotel-address">Địa chỉ: ${hotel.address}</div>
+            <div class="hotel-floors">Số tầng: ${hotel.numberFloor}</div>
+            <button class="choose-hotel" data-hotel-id="${hotel.id}">Chọn khách sạn</button>
         `;
-
         hotelList.appendChild(hotelItem);
     });
 
-    //  Chỉ mở modal khi chọn khách sạn
     document.querySelectorAll(".choose-hotel").forEach(button => {
         button.addEventListener("click", function () {
             const hotelId = this.getAttribute("data-hotel-id");
-            openHotelModal(orderId, hotelId);
+            openHotelModal(hotelId);
         });
     });
 }
 
-//  Hiển thị lỗi nếu API lỗi hoặc không có khách sạn
 function showError(message) {
     document.getElementById("hotel-list").innerHTML = `<p class="error-message">${message}</p>`;
 }
 
-//  Mở modal khi chọn khách sạn
-function openHotelModal(orderId, hotelId) {
-    document.getElementById("order-id").value = orderId;
+function openHotelModal(hotelId) {
     document.getElementById("hotel-id").value = hotelId;
     document.getElementById("hotel-modal").style.display = "flex";
+    const roomList = document.getElementById("room-list");
+    roomList.style.display = "none";
+
+    const chooseRoomBtn = document.getElementById("choose-room-btn");
+    chooseRoomBtn.addEventListener("click", function () {
+        const hotel = hotelData.find(h => h.id == hotelId);
+        if (hotel && hotel.hotelBedrooms.length > 0) {
+            if (roomList.style.display === "none") {
+                renderRoomList(hotel.hotelBedrooms);
+                roomList.style.display = "block";
+                chooseRoomBtn.textContent = "Ẩn danh sách phòng";
+            } else {
+                roomList.style.display = "none";
+                chooseRoomBtn.textContent = "Chọn phòng";
+            }
+        } else {
+            roomList.innerHTML = "<p class='error-message'>Không có phòng nào!</p>";
+        }
+    });
 }
 
-//  Gửi API chọn khách sạn
-document.getElementById("hotel-form").addEventListener("submit", function(event) {
-    event.preventDefault();
+function renderRoomList(rooms) {
+    const roomList = document.getElementById("room-list");
+    roomList.innerHTML = "";
 
-    let orderId = document.getElementById("order-id").value;
-    let hotelId = document.getElementById("hotel-id").value;
-    let startHotel = document.getElementById("checkin-date").value;
-    let endHotel = document.getElementById("checkout-date").value;
+    rooms.forEach(room => {
+        const roomItem = document.createElement("div");
+        roomItem.classList.add("room-item");
+
+        const isChecked = selectedRooms.some(selected => selected.id === room.id) ? "checked" : "";
+
+        roomItem.innerHTML = `
+            <input type="checkbox" id="room-${room.id}" value="${room.id}" ${isChecked}>
+            <label for="room-${room.id}">
+                Phòng ${room.roomNumber} - ${room.roomType} (${room.price.toLocaleString()} VND)
+            </label>
+        `;
+        roomList.appendChild(roomItem);
+    });
+
+    document.querySelectorAll("#room-list input[type='checkbox']").forEach(checkbox => {
+        checkbox.addEventListener("change", function () {
+            const roomId = parseInt(this.value);
+            const room = rooms.find(r => r.id === roomId);
+
+            if (this.checked) {
+                selectedRooms.push({
+                    id: room.id,
+                    roomNumber: room.roomNumber,
+                    price: room.price,
+                    roomType: room.roomType
+                });
+            } else {
+                selectedRooms = selectedRooms.filter(r => r.id !== roomId);
+            }
+        });
+    });
+}
+
+// Xử lý gửi form chọn khách sạn và phòng
+
+document.getElementById("hotel-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get("orderId");
+    if (!orderId) {
+        alert("Không tìm thấy orderId. Vui lòng đặt tour trước!");
+        return;
+    }
+    const hotelId = document.getElementById("hotel-id").value;
+    const checkinDate = document.getElementById("checkin-date").value;
+    const checkoutDate = document.getElementById("checkout-date").value;
+    if (!hotelId || !checkinDate || !checkoutDate || selectedRooms.length === 0) {
+        alert("Vui lòng nhập đầy đủ thông tin và chọn ít nhất một phòng!");
+        return;
+    }
+
+    console.log("Dữ liệu gửi đi:", {
+        startHotel: checkinDate,
+        endHotel: checkoutDate,
+        hotelBedroomList: selectedRooms
+    });
 
     fetch(`/order/chooseHotel/${orderId}/${hotelId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ startHotel, endHotel })
+        body: JSON.stringify({
+            startHotel: checkinDate,
+            endHotel: checkoutDate,
+            hotelBedroomList: selectedRooms
+        })
     })
         .then(response => response.json())
         .then(result => {
             if (result.message === "success") {
-                alert("Chọn khách sạn thành công!");
+                alert("Chọn khách sạn và phòng thành công!");
                 document.getElementById("hotel-modal").style.display = "none";
-                window.location.href = `/flight?orderId=${orderId}`;
+                window.location.href = `/flight?orderId=${result.data.id}`;
             } else {
-                alert(result.message || "Chọn khách sạn thất bại!");
+                alert(result.message || "Chọn khách sạn và phòng thất bại!");
             }
         })
-        .catch(() => alert("Lỗi khi chọn khách sạn!"));
+        .catch(error => {
+            console.error("Lỗi khi chọn khách sạn và phòng:", error);
+            alert("Lỗi khi chọn khách sạn và phòng!");
+        });
 });
 
-//  Đóng modal khi nhấn dấu "X"
 document.querySelector(".close-modal").addEventListener("click", function () {
     document.getElementById("hotel-modal").style.display = "none";
 });

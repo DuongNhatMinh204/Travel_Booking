@@ -43,4 +43,13 @@ public class HotelController {
         log.info("Update hotel successfully id = : {}", id);
         return apiReponse;
     }
+    @DeleteMapping("/{id}")
+    public ApiReponse<Hotel> deleteHotel(@PathVariable Long id) {
+        log.info("Delete hotel id =  : {}", id);
+        ApiReponse<Hotel> apiReponse = new ApiReponse<>();
+        hotelService.deleteHotel(id);
+        apiReponse.setMessage("Delete Success");
+        log.info("Delete hotel successfully id = : {}", id);
+        return apiReponse;
+    }
 }
