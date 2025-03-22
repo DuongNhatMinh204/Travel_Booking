@@ -418,6 +418,13 @@ section{
     display: flex;
     flex-wrap: wrap;
 }
+.event img {
+    width: 100%;
+    aspect-ratio: 16 / 9; /* Giữ tỷ lệ ảnh */
+    object-fit: cover;
+    border-radius: 10px;
+}
+
 .khoitin2 .tin{
     width: 370px;
     height: 540px;
