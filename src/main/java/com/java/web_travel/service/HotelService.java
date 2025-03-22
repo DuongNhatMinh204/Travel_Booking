@@ -11,4 +11,5 @@ public interface HotelService {
     public List<Hotel> getAllHotels();
     public Hotel updateHotel(HotelDTO hotelDTO,Long hotelId);
     public void deleteHotel(Long hotelId);
+    public List<Hotel> getHotelsByDestination(String destination);
 }

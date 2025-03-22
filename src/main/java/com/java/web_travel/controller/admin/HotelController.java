@@ -1,8 +1,10 @@
 package com.java.web_travel.controller.admin;
 
 import com.java.web_travel.entity.Hotel;
+import com.java.web_travel.entity.Order;
 import com.java.web_travel.model.request.HotelDTO;
 import com.java.web_travel.model.response.ApiReponse;
+import com.java.web_travel.repository.OrderRepository;
 import com.java.web_travel.service.HotelService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,8 @@ import java.util.List;
 public class HotelController {
     @Autowired
     private HotelService hotelService;
+    @Autowired
+    private OrderRepository orderRepository;
 
     @PostMapping("/createHotel")
     public ApiReponse<Hotel> createHotel(@Valid @RequestBody HotelDTO hotelDTO) {
@@ -33,6 +37,16 @@ public class HotelController {
         apiReponse.setData(hotelService.getAllHotels());
         apiReponse.setMessage("Success");
         log.info("Get all hotels successfully: {}", apiReponse.getData());
+        return apiReponse;
+    }
+    @GetMapping("/hotel-in-destination")
+    public ApiReponse<List<Hotel>> getHotelInDestination(@RequestParam Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(()->new RuntimeException("Order not found"));
+        String destination = order.getDestination();
+        ApiReponse<List<Hotel>> apiReponse = new ApiReponse<>();
+        apiReponse.setData(hotelService.getHotelsByDestination(destination));
+        apiReponse.setMessage("Success");
+        log.info("Get hotels successfully: {}", apiReponse.getData());
         return apiReponse;
     }
     @PutMapping("/updateHotel/{id}")
