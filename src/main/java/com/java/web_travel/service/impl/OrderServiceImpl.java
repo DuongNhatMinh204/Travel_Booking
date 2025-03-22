@@ -143,7 +143,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(()->new AppException(ErrorCode.ORDER_NOT_FOUND));
         hotelBookingRepository.deleteByOrderId(orderId);
         Flight flight = order.getFlight();
-        flight.setSeatAvailable(flight.getNumberOfChairs()+order.getNumberOfPeople());
+        flight.setSeatAvailable(flight.getSeatAvailable()+order.getNumberOfPeople());
         flightRepository.save(flight);
         orderRepository.delete(order);
         return ;

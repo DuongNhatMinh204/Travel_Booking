@@ -76,7 +76,12 @@ function chooseFlight(orderId, flightId) {
         .then(result => {
             if (result.message === "success") {
                 alert("Chọn chuyến bay thành công!");
-                window.location.href = `/plan-trip`;
+                Promise.all([
+                    fetch(`/api/v1/email/${orderId}/announce`, { method: "POST" }),
+                    new Promise(resolve => setTimeout(resolve, 500))
+                ]).then(() => {
+                    window.location.href = `/plan-trip`;
+                });
             } else {
                 alert(result.message || "Chọn chuyến bay thất bại!");
             }

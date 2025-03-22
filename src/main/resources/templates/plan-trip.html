@@ -346,7 +346,13 @@
               .then(response => {
                 if (response.ok) {
                   alert('Hủy chuyến thành công!');
-                  window.location.reload(); // Tải lại trang để cập nhật dữ liệu
+                  Promise.all([
+                    fetch(`/api/v1/email/${tripId}/announce-cancel`, { method: "POST" }),
+                    new Promise(resolve => setTimeout(resolve, 500))
+                  ]).then(() => {
+                    window.location.reload();
+                  });
+                  // window.location.reload(); // Tải lại trang để cập nhật dữ liệu
                 } else {
                   alert('Không thể hủy chuyến!');
                 }

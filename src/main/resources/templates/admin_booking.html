@@ -343,7 +343,13 @@
                 .then(data => {
                     if (data.code === 1000) {
                         alert("Xác nhận thanh toán thành công!");
-                        fetchOrders(currentPage); // Làm mới bảng
+                        Promise.all([
+                            fetch(`/api/v1/email/${currentOrderId}/announce-pay-success`, { method: "POST" }),
+                            new Promise(resolve => setTimeout(resolve, 500))
+                        ]).then(() => {
+                            fetchOrders(currentPage);
+                        });
+                        // fetchOrders(currentPage); // Làm mới bảng
                     } else {
                         alert("Xác nhận thanh toán thất bại: " + data.message);
                     }
@@ -370,7 +376,13 @@
                 .then(data => {
                     if (data.code === 1000) {
                         alert("Xác nhận thanh toán thất bại!");
-                        fetchOrders(currentPage); // Làm mới bảng
+                        Promise.all([
+                            fetch(`/api/v1/email/${currentOrderId}/announce-pay-falled`, { method: "POST" }),
+                            new Promise(resolve => setTimeout(resolve, 500))
+                        ]).then(() => {
+                            fetchOrders(currentPage);
+                        });
+                        // fetchOrders(currentPage); // Làm mới bảng
                     } else {
                         alert("Xác nhận thanh toán thất bại: " + data.message);
                     }
