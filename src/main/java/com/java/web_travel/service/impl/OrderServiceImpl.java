@@ -127,12 +127,13 @@ public class OrderServiceImpl implements OrderService {
             throw new AppException(ErrorCode.NOT_VALID_FLIGHT_DATE) ;
         }
 
-        flight.setSeatAvailable(flight.getNumberOfChairs()-order.getNumberOfPeople());// cập nhật số ghees thừa
+        flight.setSeatAvailable(flight.getSeatAvailable()-order.getNumberOfPeople());// cập nhật số ghees thừa
         order.setFlight(flight);
         // tính tiền
         order.setTotalPrice(order.getTotalPrice()+order.getNumberOfPeople()*flight.getPrice());
         //xác nhận tình trạng thanh toán
         order.setPayment(payRepository.findByStatus(PaymentStatus.UNPAID).orElseThrow(()->new AppException(ErrorCode.PAYMENT_UNPAID_NOT_EXISTS)));
+        flightRepository.save(flight);
         orderRepository.save(order);
         return order ;
     }
