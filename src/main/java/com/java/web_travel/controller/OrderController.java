@@ -142,11 +142,39 @@ public class OrderController {
             return new ApiReponse<>(7777,e.getMessage(),null);
         }
     }
-    @PostMapping("/pay/{tripId}")
-    public  ApiReponse<Order> payOrder(@PathVariable Long tripId){
+//    @PostMapping("/pay/{tripId}")
+//    public  ApiReponse<Order> payOrder(@PathVariable Long tripId){
+//        ApiReponse apiReponse = new ApiReponse<>();
+//        apiReponse.setData(orderService.payOrderById(tripId));
+//        apiReponse.setMessage("pay success");
+//        return apiReponse;
+//    }
+
+    @PostMapping("/{orderId}/confirm-payment")
+    public ApiReponse<Order> confirmOrder(@PathVariable Long orderId){
         ApiReponse apiReponse = new ApiReponse<>();
-        apiReponse.setData(orderService.payOrderById(tripId));
-        apiReponse.setMessage("pay success");
-        return apiReponse;
+       log.info("Start confirm payment order : {} ",orderId);
+       try{
+           apiReponse.setData(orderService.confirmPayment(orderId));
+           apiReponse.setMessage("confirm payment success");
+           return apiReponse;
+       } catch (Exception e) {
+           log.error(e.getMessage());
+           return new ApiReponse<>(7777,e.getMessage(),null);
+       }
     }
+    @PostMapping("/{orderId}/verifying-payment")
+    public ApiReponse<Order> verifyOrder(@PathVariable Long orderId){
+        ApiReponse apiReponse = new ApiReponse<>();
+        try {
+            apiReponse.setData(orderService.verifyPayment(orderId));
+            apiReponse.setMessage("verify payment success");
+            return apiReponse;
+        }catch (Exception e) {
+            log.error(e.getMessage());
+            return new ApiReponse<>(7777,e.getMessage(),null);
+        }
+    }
+
+
 }
