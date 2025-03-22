@@ -28,6 +28,13 @@ public enum ErrorCode {
     NUMBER_FLOOR_NOT_VALID(1019,"number floor not valid", HttpStatus.BAD_REQUEST),
     HOTEL_BEDROOM_NOT_AVAILABLE(1020,"Phòng đã có người đặt trước . Vui lòng đặt phòng khác ! ", HttpStatus.BAD_REQUEST),
     NOT_CHANGE_STATUS_ADMIN(1021,"Không thể thay đổi trạng thái của admin", HttpStatus.BAD_REQUEST),
+    PAYMENT_PAID_NOT_EXISTS(1022,"payment paid not exists", HttpStatus.BAD_REQUEST),
+    PAYMENT_VERIFY_NOT_EXISTS(1023,"payment verify not exists", HttpStatus.BAD_REQUEST),
+    PAYMENT_UNPAID_NOT_EXISTS(1024,"payment unpaid not exists", HttpStatus.BAD_REQUEST),
+    PAYMENT_FALSE_NOT_EXISTS(1025,"payment false not exists", HttpStatus.BAD_REQUEST),
+    EMAIL_TO_NOT_BLANK(1026,"email can not blank", HttpStatus.BAD_REQUEST),
+    SUBJECT_NOT_BLANK(1027,"subject of email can not blank", HttpStatus.BAD_REQUEST),
+    BODY_NOT_BLANK(1028,"body can not blank", HttpStatus.BAD_REQUEST),
     ;
     private int code ;
     private String message;

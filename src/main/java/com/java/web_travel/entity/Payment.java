@@ -23,7 +23,6 @@ public class Payment {
 
     public Payment(PaymentStatus status) {
         this.status = status;
-
     }
 
 }

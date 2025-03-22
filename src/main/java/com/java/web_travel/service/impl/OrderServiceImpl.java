@@ -3,7 +3,6 @@ package com.java.web_travel.service.impl;
 import com.java.web_travel.entity.*;
 import com.java.web_travel.enums.ErrorCode;
 import com.java.web_travel.enums.PaymentStatus;
-import com.java.web_travel.enums.RoomStatus;
 import com.java.web_travel.exception.AppException;
 import com.java.web_travel.model.request.OrderDTO;
 import com.java.web_travel.model.request.OrderHotelDTO;
@@ -40,6 +39,9 @@ public class OrderServiceImpl implements OrderService {
     private HotelBedroomRepository hotelBedroomRepository;
     @Autowired
     private HotelBookingRepository hotelBookingRepository;
+    @Autowired
+    private PayRepository payRepository;
+
     @Override
     public Order addOrder(OrderDTO orderDTO, Long userId) {
         Order order = new Order();
@@ -125,14 +127,13 @@ public class OrderServiceImpl implements OrderService {
             throw new AppException(ErrorCode.NOT_VALID_FLIGHT_DATE) ;
         }
 
-        flight.setSeatAvailable(flight.getNumberOfChairs()-order.getNumberOfPeople());// cập nhật số ghees thừa
+        flight.setSeatAvailable(flight.getSeatAvailable()-order.getNumberOfPeople());// cập nhật số ghees thừa
         order.setFlight(flight);
         // tính tiền
         order.setTotalPrice(order.getTotalPrice()+order.getNumberOfPeople()*flight.getPrice());
         //xác nhận tình trạng thanh toán
-        Payment  payment = new Payment();
-        payment.setStatus(PaymentStatus.UNPAID);
-        order.setPayment(payment);
+        order.setPayment(payRepository.findByStatus(PaymentStatus.UNPAID).orElseThrow(()->new AppException(ErrorCode.PAYMENT_UNPAID_NOT_EXISTS)));
+        flightRepository.save(flight);
         orderRepository.save(order);
         return order ;
     }
@@ -143,7 +144,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(()->new AppException(ErrorCode.ORDER_NOT_FOUND));
         hotelBookingRepository.deleteByOrderId(orderId);
         Flight flight = order.getFlight();
-        flight.setSeatAvailable(flight.getNumberOfChairs()+order.getNumberOfPeople());
+        flight.setSeatAvailable(flight.getSeatAvailable()+order.getNumberOfPeople());
         flightRepository.save(flight);
         orderRepository.delete(order);
         return ;
@@ -239,12 +240,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order payOrderById(Long orderId) {
+    public Order confirmPayment(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(()->new AppException(ErrorCode.ORDER_NOT_FOUND));
-        Payment payment = new Payment();
-        payment.setStatus(PaymentStatus.PAID);
+        Payment payment = payRepository.findByStatus(PaymentStatus.PAID).orElseThrow(()-> new AppException(ErrorCode.PAYMENT_PAID_NOT_EXISTS)) ;
         order.setPayment(payment);
-        orderRepository.save(order);
-        return order ;
+        return orderRepository.save(order);
+    }
+
+    @Override
+    public Order verifyPayment(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(()->new AppException(ErrorCode.ORDER_NOT_FOUND));
+        order.setPayment(payRepository.findByStatus(PaymentStatus.VERIFYING).orElseThrow(()->new AppException(ErrorCode.PAYMENT_VERIFY_NOT_EXISTS)));
+        return orderRepository.save(order);
+    }
+
+    @Override
+    public Order payFalled(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(()->new AppException(ErrorCode.ORDER_NOT_FOUND));
+        order.setPayment(payRepository.findByStatus(PaymentStatus.PAYMENT_FAILED).orElseThrow(()->new AppException(ErrorCode.PAYMENT_FALSE_NOT_EXISTS)));
+        return orderRepository.save(order);
     }
 }
