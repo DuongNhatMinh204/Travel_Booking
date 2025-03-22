@@ -31,6 +31,7 @@ public enum ErrorCode {
     PAYMENT_PAID_NOT_EXISTS(1022,"payment paid not exists", HttpStatus.BAD_REQUEST),
     PAYMENT_VERIFY_NOT_EXISTS(1023,"payment verify not exists", HttpStatus.BAD_REQUEST),
     PAYMENT_UNPAID_NOT_EXISTS(1024,"payment unpaid not exists", HttpStatus.BAD_REQUEST),
+    PAYMENT_FALSE_NOT_EXISTS(1025,"payment false not exists", HttpStatus.BAD_REQUEST),
     ;
     private int code ;
     private String message;

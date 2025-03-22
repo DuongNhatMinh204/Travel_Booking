@@ -69,6 +69,46 @@
         .confirm-btn:hover {
             background-color: #45a049; /* Màu xanh lá cây đậm hơn khi hover */
         }
+        #payment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #payment-modal > div {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .confirm-btn {
+            background-color: #4CAF50; /* Màu xanh lá cây */
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        .confirm-btn:hover {
+            opacity: 0.9;
+        }
+
+        #confirm-failed-btn {
+            background-color: #f44336; /* Màu đỏ */
+        }
+
+        #close-modal-btn {
+            background-color: #ccc; /* Màu xám */
+        }
     </style>
 </head>
 <body>
@@ -122,9 +162,18 @@
     </tbody>
 </table>
 <div id="pagination" style="margin-top: 20px; text-align: center"></div>
-
+<!-- Modal -->
+<div id="payment-modal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
+    <div style="background-color: white; padding: 20px; border-radius: 10px; text-align: center;">
+        <h2>Xác nhận thanh toán</h2>
+        <p>Bạn có chắc chắn muốn xác nhận thanh toán cho đơn hàng này không?</p>
+        <button id="confirm-success-btn" class="confirm-btn">Thành công</button>
+        <button id="confirm-failed-btn" class="confirm-btn" style="background-color: #f44336;">Thất bại</button>
+        <button id="close-modal-btn" class="confirm-btn" style="background-color: #ccc;">Đóng</button>
+    </div>
+</div>
 <script>
-
+    let currentOrderId = null; // Lưu orderId được chọn
     let currentPage = 0; // Trang hiện tại
     const pageSize = 5; // Số lượng đơn hàng mỗi trang
     document.addEventListener("DOMContentLoaded", function () {
@@ -151,29 +200,26 @@
         tableBody.innerHTML = ""; // Xóa dữ liệu cũ (nếu có)
 
         orders.forEach(order => {
-            console.log("Order:", order); // Debug dữ liệu order
-            console.log("Flight:", order.flight); // Debug dữ liệu flight
-
             const row = document.createElement("tr");
             row.innerHTML = `
-            <td>${order.id}</td>
-            <td>${formatDateTime(order.orderDate)}</td>
-            <td>${order.user.fullName}</td>
-            <td>${order.destination}</td>
-            <td>${formatDate(order.checkinDate)}</td>
-            <td>${formatDate(order.checkoutDate)}</td>
-            <td>${order.flight ? order.flight.airlineName : "N/A"}</td>
-            <td>${order.flight ? formatDateTime(order.flight.checkInDate) : "N/A"}</td>
-            <td>${order.flight ? formatDateTime(order.flight.checkOutDate) : "N/A"}</td>
-            <td>${order.hotel ? order.hotel.hotelName : "N/A"}</td>
-            <td>${order.totalPrice}</td>
-            <td>${order.payment ? getPaymentStatus(order.payment.status) : 'Chưa thanh toán'}</td>
-            <td>
-                ${order.payment && order.payment.status === 'VERIFYING'
+      <td>${order.id}</td>
+      <td>${formatDateTime(order.orderDate)}</td>
+      <td>${order.user.fullName}</td>
+      <td>${order.destination}</td>
+      <td>${formatDate(order.checkinDate)}</td>
+      <td>${formatDate(order.checkoutDate)}</td>
+      <td>${order.flight ? order.flight.airlineName : "N/A"}</td>
+      <td>${order.flight ? formatDateTime(order.flight.checkInDate) : "N/A"}</td>
+      <td>${order.flight ? formatDateTime(order.flight.checkOutDate) : "N/A"}</td>
+      <td>${order.hotel ? order.hotel.hotelName : "N/A"}</td>
+      <td>${order.totalPrice}</td>
+      <td>${order.payment ? getPaymentStatus(order.payment.status) : 'Chưa thanh toán'}</td>
+      <td>
+        ${order.payment && order.payment.status === 'VERIFYING'
                 ? `<button class="confirm-btn" onclick="confirmPayment(${order.id})">Xác nhận thanh toán</button>`
                 : ''}
-            </td>
-        `;
+      </td>
+    `;
             tableBody.appendChild(row);
         });
     }
@@ -271,6 +317,8 @@
                 return 'Chưa thanh toán';
             case 'VERIFYING':
                 return 'Đang xác minh';
+            case  'PAYMENT_FAILED':
+                return 'Thanh toán thất bại'
             default:
                 return 'Chưa thanh toán'; // Mặc định cho các trường hợp khác
         }
@@ -278,8 +326,14 @@
 </script>
 <script>
     function confirmPayment(orderId) {
-        if (confirm("Bạn có chắc chắn muốn xác nhận thanh toán cho đơn hàng này không?")) {
-            fetch(`/order/${orderId}/confirm-payment`, {
+            currentOrderId = orderId; // Lưu orderId vào biến toàn cục
+            document.getElementById('payment-modal').style.display = 'flex'; // Hiển thị modal
+    }
+</script>
+<script>
+    document.getElementById('confirm-success-btn').addEventListener('click', function () {
+        if (currentOrderId) {
+            fetch(`/order/${currentOrderId}/confirm-payment`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -289,8 +343,7 @@
                 .then(data => {
                     if (data.code === 1000) {
                         alert("Xác nhận thanh toán thành công!");
-                        // Làm mới bảng sau khi xác nhận
-                        fetchOrders(currentPage);
+                        fetchOrders(currentPage); // Làm mới bảng
                     } else {
                         alert("Xác nhận thanh toán thất bại: " + data.message);
                     }
@@ -298,9 +351,43 @@
                 .catch(error => {
                     console.error("Error confirming payment:", error);
                     alert("Có lỗi xảy ra khi xác nhận thanh toán. Vui lòng thử lại sau.");
+                })
+                .finally(() => {
+                    document.getElementById('payment-modal').style.display = 'none'; // Ẩn modal
                 });
         }
-    }
+    });
+
+    document.getElementById('confirm-failed-btn').addEventListener('click', function () {
+        if (currentOrderId) {
+            fetch(`/order/${currentOrderId}/payment-falled`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 1000) {
+                        alert("Xác nhận thanh toán thất bại!");
+                        fetchOrders(currentPage); // Làm mới bảng
+                    } else {
+                        alert("Xác nhận thanh toán thất bại: " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error confirming payment failed:", error);
+                    alert("Có lỗi xảy ra khi xác nhận thanh toán thất bại. Vui lòng thử lại sau.");
+                })
+                .finally(() => {
+                    document.getElementById('payment-modal').style.display = 'none'; // Ẩn modal
+                });
+        }
+    });
+
+    document.getElementById('close-modal-btn').addEventListener('click', function () {
+        document.getElementById('payment-modal').style.display = 'none'; // Ẩn modal
+    });
 </script>
 </body>
 </html>

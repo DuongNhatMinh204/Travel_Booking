@@ -252,4 +252,11 @@ public class OrderServiceImpl implements OrderService {
         order.setPayment(payRepository.findByStatus(PaymentStatus.VERIFYING).orElseThrow(()->new AppException(ErrorCode.PAYMENT_VERIFY_NOT_EXISTS)));
         return orderRepository.save(order);
     }
+
+    @Override
+    public Order payFalled(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(()->new AppException(ErrorCode.ORDER_NOT_FOUND));
+        order.setPayment(payRepository.findByStatus(PaymentStatus.PAYMENT_FAILED).orElseThrow(()->new AppException(ErrorCode.PAYMENT_FALSE_NOT_EXISTS)));
+        return orderRepository.save(order);
+    }
 }

@@ -23,4 +23,5 @@ public interface OrderService {
 
     public Order confirmPayment(Long orderId);
     public Order verifyPayment(Long orderId);
+    public Order payFalled(Long orderId);
 }

@@ -175,6 +175,17 @@ public class OrderController {
             return new ApiReponse<>(7777,e.getMessage(),null);
         }
     }
-
+    @PostMapping("/{orderId}/payment-falled")
+    public ApiReponse<Order> paymentFalledOrder(@PathVariable Long orderId){
+        ApiReponse apiReponse = new ApiReponse<>();
+        try {
+            apiReponse.setData(orderService.payFalled(orderId));
+            apiReponse.setMessage("pay falled ");
+            return apiReponse;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new ApiReponse<>(7777,e.getMessage(),null);
+        }
+    }
 
 }

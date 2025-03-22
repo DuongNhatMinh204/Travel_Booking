@@ -25,6 +25,9 @@ public class PaymentSeeder {
 
             Payment paymentVerifying = new Payment(PaymentStatus.VERIFYING);
             payRepository.save(paymentVerifying);
+
+            Payment paymentFalled = new Payment(PaymentStatus.PAYMENT_FAILED) ;
+            payRepository.save(paymentFalled);
         }
     }
 }
