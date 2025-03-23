@@ -20,6 +20,8 @@ public class    HotelServiceImpl implements HotelService {
     @Autowired
     private HotelConverter hotelConverter;
 
+
+
     @Override
     public Hotel createHotel(HotelDTO hotelDTO) {
         Hotel hotel = hotelConverter.convertHotel(hotelDTO);
@@ -60,5 +62,10 @@ public class    HotelServiceImpl implements HotelService {
                 .orElseThrow(() -> new AppException(ErrorCode.HOTEL_NOT_FOUND));
 
         hotelRepository.deleteById(hotelId);
+    }
+
+    @Override
+    public List<Hotel> getHotelsByDestination(String destination) {
+        return hotelRepository.findByDestination(destination);
     }
 }

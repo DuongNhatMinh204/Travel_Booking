@@ -6,7 +6,15 @@ let hotelData = [];
 let selectedRooms = []; // Lưu danh sách phòng đã chọn
 
 function fetchHotels() {
-    fetch("/admin/getAllHotels")
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get("orderId");
+
+    let apiUrl = "/admin/getAllHotels"; // Mặc định lấy tất cả khách sạn
+    if (orderId) {
+        apiUrl = `/admin/hotel-in-destination?orderId=${orderId}`; // Nếu có orderId, chỉ lấy theo điểm đến
+    }
+
+    fetch(apiUrl)
         .then(response => response.json())
         .then(result => {
             if (result.code === 1000 && result.data.length > 0) {
