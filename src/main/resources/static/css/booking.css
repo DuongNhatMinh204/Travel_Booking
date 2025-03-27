@@ -35,6 +35,61 @@ header{
     height: 50px;
 
 }
+nav.bar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.bar .home a{
+    margin-right: 15px;
+    font-size: 18px;
+    color: white;
+}
+
+.home:hover {
+    background-color: var(--green);
+    color: var(--xanh);
+}
+/* Dropdown buttons */
+.dropdown .btn-secondary {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 16px;
+    padding: 10px 15px;
+    text-transform: capitalize;
+}
+
+.dropdown .btn-secondary:hover,
+.dropdown .btn-secondary:focus {
+    background-color: var(--green);
+    color: var(--xanh);
+    box-shadow: none;
+}
+
+.dropdown-toggle::after {
+    margin-left: 5px;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    background-color: var(--green);
+    border: none;
+    border-radius: 0 0 5px 5px;
+    margin-top: 0;
+}
+
+.dropdown-item {
+    color: white;
+    padding: 8px 16px;
+    font-size: 15px;
+}
+
+.dropdown-item:hover {
+    background-color: var(--green);
+    color: var(--xanh);
+}
 header .logo{
     margin-left: 30px;
     font-size: 30px;
@@ -48,7 +103,7 @@ header .logo span{
 header .bar a{
     margin-right: 15px;
     font-size: 18px;
-    color: white;
+    color: black;
 }
 header .bar a:hover{
     color: var(--xanh);
@@ -57,9 +112,11 @@ header .bar a:hover{
     color: var(--xanh);
 }
 .icons{
+    margin-left: 15px;
     margin-right: 90px;
 }
 .icons i{
+    margin-left:10vh;
     color: white;
     font-size: 18px;
 

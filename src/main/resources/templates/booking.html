@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="/css/booking.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -43,19 +45,44 @@
 <header>
     <a href="#" class="logo"><span>Future</span>Wonders</a>
     <nav class="bar">
-        <a href="home" >Trang Chủ</a>
-        <a href="booking" class="indam">Đặt Lịch</a>
-        <a href="hotel" >Khách Sạn</a>
-        <a href="flight">Chuyến Bay</a>
-        <a href="trending">Thịnh Hành</a>
-        <a href="news">Tin Tức</a>
-        <a href="package">Packages</a>
-        <a href="services">Dịch Vụ</a>
-        <a href="gallery">Thư Viện</a>
-        <a href="review">Đánh Giá</a>
-        <a href="contact">Liên Hệ</a>
-        <a href="plan-trip">Thanh Toán</a>
+        <div class="home">
+            <a href="home">Trang Chủ</a>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                Du Lịch
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a href="booking" class="dropdown-item indam">Đặt Lịch</a></li>
+                <li><a href="flight" class="dropdown-item">Chuyến Bay</a></li>
+                <li><a href="hotel" class="dropdown-item">Khách Sạn</a></li>
+            </ul>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                Khám Phá
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a href="trending" class="dropdown-item">Thịnh Hành</a></li>
+                <li><a href="package" class="dropdown-item">Packages</a></li>
+                <li><a href="gallery" class="dropdown-item">Thư Viện</a></li>
+                <li><a href="services" class="dropdown-item">Dịch Vụ</a></li>
+            </ul>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
+                Thông Tin
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a href="news" class="dropdown-item">Tin Tức</a></li>
+                <li><a href="review" class="dropdown-item">Đánh Giá</a></li>
+                <li><a href="contact" class="dropdown-item">Liên Hệ</a></li>
+                <li><a href="plan-trip" class="dropdown-item">Thanh Toán</a></li>
+            </ul>
+        </div>
     </nav>
+
+
     <div class="icons">
         <a href="#"><i class="fas fa-search" id="search-btn"></i></a>
         <!--        <a href="user"><i class="fas fa-user" id="login-btn"></i></a>-->
