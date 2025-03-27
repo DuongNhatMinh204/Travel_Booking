@@ -20,10 +20,10 @@
 <header>
     <a href="#" class="logo"><span>Future</span>Wonders</a>
     <nav class="bar">
-        <a href="admin_booking">Trip Management</a>
-        <a href="admin_account">Account Management</a>
-        <a href="admin_flights" class="indam">Flight Management</a>
-        <a href="admin_hotel">Hotel Management</a>
+        <a href="admin_booking">Quản Lý Chuyến Đi</a>
+        <a href="admin_account">Quản Lý Tài Khoản</a>
+        <a href="admin_flights" class="indam">Quản Lý Chuyến Bay</a>
+        <a href="admin_hotel">Quản Lý Khách Sạn</a>
     </nav>
     <div class="icons">
         <a href=""><i class="fas fa-search" id="search-btn"></i></a>
@@ -33,19 +33,19 @@
 
 <div class="container">
     <h2>Manage Flights</h2>
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFlightModal">Add Flight</button>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFlightModal">Thêm Chuyến Bay</button>
     <table class="table table-bordered mt-3" id="flight-table">
         <thead>
         <tr>
             <th>ID</th>
-            <th>Class</th>
-            <th>Airline</th>
-            <th>Price</th>
-            <th>Departure</th>
-            <th>Arrival</th>
-            <th>Seats</th>
-            <th>Available</th>
-            <th>Actions</th>
+            <th>Hạng</th>
+            <th>Hãng Bay</th>
+            <th>Giá</th>
+            <th>Khởi Hành</th>
+            <th>Hạ Cánh</th>
+            <th>Số Chỗ Ngồi</th>
+            <th>Có Sẵn</th>
+            <th>Hành Động</th>
         </tr>
         </thead>
         <tbody></tbody>
@@ -78,7 +78,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Update Flight</h5>
+                <h5 class="modal-title">Cập Nhật Chuyến Bay</h5>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="updateFlightId">
@@ -93,7 +93,7 @@
                 <input type="number" id="updateNumberOfChairs" placeholder="Seats" class="form-control mb-2">
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" onclick="saveUpdatedFlight()">Save Changes</button>
+                <button class="btn btn-primary" onclick="saveUpdatedFlight()">Lưu Thay Đổi</button>
             </div>
         </div>
     </div>
@@ -121,8 +121,8 @@
                 <td>${flight.numberOfChairs}</td>
                 <td>${flight.seatAvailable}</td>
                 <td>
-                    <button class='btn btn-success' onclick='openUpdateModal(${JSON.stringify(flight)})'>Update</button>
-                    <button class='btn btn-danger' onclick='deleteFlight(${flight.id})'>Delete</button>
+                    <button class='btn btn-success' onclick='openUpdateModal(${JSON.stringify(flight)})'>Cập Nhật</button>
+                    <button class='btn btn-danger' onclick='deleteFlight(${flight.id})'>Xóa</button>
                 </td>
             </tr>`;
             tableBody.innerHTML += row;
