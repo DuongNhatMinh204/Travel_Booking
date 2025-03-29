@@ -93,6 +93,8 @@ header .bar a:hover{
     margin-right: 75px;
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 .khoitin .tin{
     width: 450px;

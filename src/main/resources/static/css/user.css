@@ -10,7 +10,7 @@
 * {
     font-family: 'Nunito', sans-serif;
     box-sizing: border-box;
-    text-transform: capitalize;
+    /*text-transform: capitalize;*/
     outline: none;
     border: none;
     text-decoration: none;

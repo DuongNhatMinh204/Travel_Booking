@@ -33,6 +33,7 @@ header{
     justify-content: space-between;
     padding: 10px 35px;
     height: 50px;
+    z-index: 1000;
 
 }
 header .logo{
@@ -89,39 +90,138 @@ header .bar a:hover{
 }
 
 .khoitin{
-    margin-left: 170px;
-    margin-top: 50px;
-    margin-right: 170px;
+
     display: flex;
     flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    padding: 2rem;
+
 }
-.khoitin .tin{
-    width: 370px;
-    height: 540px;
-    border-radius: 30px;
+
+
+.tin {
+    flex: 1 1 30rem;
+    max-width: 35rem;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    position: relative;
+    padding-bottom: 150px;
+}
+
+.tin:hover {
+    transform: translateY(-1rem);
+}
+
+.tin video {
+    width: 100%;
+    height: 25rem;
+    object-fit: cover;
+}
+
+.tin .content {
+    /*padding: 2rem;*/
+    flex: 1; /* Đẩy phần giá và nút xuống dưới */
+    padding: 2rem;
     display: flex;
-    flex-direction: column ;
-    margin-right: 10px;
+    flex-direction: column;
 }
-.khoitin .tin video{
-    width: 370px;
-    height: 205px;
-    border-radius: 30px;
+
+.tin .content h3 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1rem;
 }
-.content i{
-    color: var(--orange);
+
+.tin .content p {
+    font-size: 1.4rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    height: 10rem; /* Cố định chiều cao cho mô tả */
+    overflow: hidden;
 }
-.price{
-    font-size: 32px;
-    color:#333;
-    padding-top: 16px;
+
+.tin .content .stars {
+    margin-bottom: 1.5rem;
 }
-.price span{
-    color:#666;
-    font-size: 24px;
+
+.tin .content .stars i {
+    font-size: 1.5rem;
+    color: #ffa500;
+}
+
+.tin .content .price {
+    font-size: 2rem;
+    color: #333;
+    font-weight: bold;
+    padding: 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 20px;
+    left: 2rem;
+    right: 2rem;
+
+    gap: 1rem; /* Khoảng cách giữa giá và giá gốc */
+    margin-top: auto; /* Đẩy xuống cuối khối tin */
+}
+
+.tin .content .price span {
+    font-size: 1.5rem;
+    color: #999;
     text-decoration: line-through;
-    text-transform: none;
+    font-weight: normal;
 }
+
+.tin .content .docthem {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.8rem 2.5rem;
+    background: #ffa500;
+    color: #fff;
+    font-size: 1.5rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: background 0.3s ease;
+    position: absolute;
+    bottom: 0;
+    left: 2rem;
+    right: 2rem;
+}
+
+.tin .content .docthem:hover {
+    background: #ff8c00;
+}
+
+/* Đảm bảo các khối tin có cùng chiều cao */
+@media (max-width: 1200px) {
+    .khoitin {
+        gap: 1.5rem;
+    }
+
+    .tin {
+        flex: 1 1 25rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .tin {
+        flex: 1 1 100%;
+    }
+
+    .tin .content p {
+        height: auto; /* Bỏ cố định chiều cao trên mobile */
+    }
+}
+.khoitin a:hover{
+    background: #e1c6c6;
+}
+
 .docthem {
     background-color: var(--trong);
     font-size: 16px; /* Giảm kích thước font chữ để nhỏ hơn so với ô */
@@ -131,7 +231,4 @@ header .bar a:hover{
     border-radius: 5px; /* Thêm bo tròn góc cho ô xanh */
     margin-top: 10px; /* Tạo khoảng cách phía trên nếu cần */
     color: white; /* Màu chữ trắng để tương phản với màu nền */
-}
-.khoitin a:hover{
-    background: #e1c6c6;
 }
